@@ -73,6 +73,60 @@
                 </div>
             </div>
 
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label text-md-right">Schedule</label>
+                <div class="col-md-6">
+                    @php
+                        $existingSchedules = $data['doctorsDetail']->schedules->keyBy('day_of_week');
+                        $days = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+                    @endphp
+            
+                    @foreach ($days as $day)
+                        @php $sched = isset($existingSchedules[$day]) ? $existingSchedules[$day] : null; @endphp
+            
+                        <div class="border p-3 mb-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input day-toggle" type="checkbox"
+                                       id="enable-{{ $day }}"
+                                       name="schedules[{{ $day }}][enabled]"
+                                       value="1"
+                                       data-day="{{ $day }}"
+                                       {{ $sched ? 'checked' : '' }}>
+                                <label class="form-check-label font-weight-bold" for="enable-{{ $day }}">{{ $day }} Available</label>
+                            </div>
+            
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label>Start Time</label>
+                                    <input type="time"
+                                           name="schedules[{{ $day }}][start_time]"
+                                           value="{{ $sched->start_time ?? '' }}"
+                                           class="form-control schedule-input-{{ $day }}">
+                                </div>
+                                <div class="form-group col">
+                                    <label>End Time</label>
+                                    <input type="time"
+                                           name="schedules[{{ $day }}][end_time]"
+                                           value="{{ $sched->end_time ?? '' }}"
+                                           class="form-control schedule-input-{{ $day }}">
+                                </div>
+                                <div class="form-group col">
+                                    <label>Max Patients</label>
+                                    <input type="number"
+                                           name="schedules[{{ $day }}][max_patients]"
+                                           value="{{ $sched->max_patients ?? '' }}"
+                                           min="1"
+                                           max="100"
+                                           class="form-control schedule-input-{{ $day }}">
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            
+            
+
 
             <div class="form-group row">
                 <div class="col-md-6">
@@ -87,3 +141,21 @@
 </main>
 @include('layouts.dashboard.footer')
 @endsection
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.day-toggle').forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                const day = this.getAttribute('data-day');
+                const inputs = document.querySelectorAll('.schedule-input-' + day);
+    
+                inputs.forEach(function (input) {
+                    input.disabled = !checkbox.checked;
+                });
+            });
+    
+            // Trigger change on page load in case of old values
+            checkbox.dispatchEvent(new Event('change'));
+        });
+    });
+    </script>
+    

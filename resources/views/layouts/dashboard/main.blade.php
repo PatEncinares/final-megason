@@ -18,7 +18,10 @@
         <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.css" rel="stylesheet">
          <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.css" rel="stylesheet">
-        <style>
+         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+         
+        {{-- <style>
             input[type="date"]::-webkit-calendar-picker-indicator {
                 background: transparent;
                 bottom: 0;
@@ -31,7 +34,7 @@
                 top: 0;
                 width: auto;
             }
-        </style>
+        </style> --}}
 
     </head>
     <body class="sb-nav-fixed">

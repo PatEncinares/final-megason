@@ -186,6 +186,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/update','UsersController@updateProfile')->name('update-profile');
     Route::get('/auth/change-password/{id}','UsersController@changePassword')->name('change-password');
     Route::post('/auth/change-new-password','UsersController@savePassword')->name('save-new-password');
+
+    Route::get('/specialization/list','SpecializationController@list')->name('get-specialization-list');
+    Route::get('/specialization/edit/{id}','SpecializationController@edit')->name('edit-specialization');
+    Route::post('/specialization/update','SpecializationController@update')->name('update-specialization');
+    Route::get('/specialization/delete/{id}','SpecializationController@delete')->name('delete-specialization');
+    Route::get('/specialization/create','SpecializationController@create')->name('create-specialization');
+    Route::post('/specialization/save','SpecializationController@save')->name('save-specialization');
    
     Route::get('/smstest','HomeController@testSMS')->name('smstest');
 

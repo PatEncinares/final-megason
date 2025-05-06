@@ -164,7 +164,7 @@
                 <div class="collapse" id="collapseUsers" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="{{ route('user-list') }}">Users List</a>
-                        <a class="nav-link" href="{{ route('get-settings') }}">Management Settings</a>
+                        <a class="nav-link" href="{{ route('get-specialization-list') }}">Specialization</a>
                         <a class="nav-link" href="{{ route('activity-log') }}">Activity Log</a>
                     </nav>
                 </div>

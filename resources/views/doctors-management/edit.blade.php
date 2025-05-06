@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <div class="form-group row">
+            {{-- <div class="form-group row">
                 <label for="specialization" class="col-md-4 col-form-label text-md-right">{{ __('Specialization') }}</label>
 
                 <div class="col-md-6">
@@ -54,6 +54,26 @@
                     @if ($errors->has('specialization'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('specialization') }}</strong>
+                        </span>
+                    @endif
+                </div>
+            </div> --}}
+
+            <div class="form-group row">
+                <label for="specialization_id" class="col-md-4 col-form-label text-md-right">{{ __('Specialization') }}</label>
+            
+                <div class="col-md-6">
+                    <select id="specialization_id" name="specialization_id" class="form-control select2" required>
+                        <option value="" disabled selected>-- Select Specialization --</option>
+                        @foreach($data['specialization'] as $spec)
+                            <option value="{{ $spec->id }}" {{ $data['doctorsDetail']['specialization_id'] == $spec->id ? 'selected' : '' }}>
+                                {{ $spec->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('specialization_id'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('specialization_id') }}</strong>
                         </span>
                     @endif
                 </div>
@@ -143,19 +163,43 @@
 @endsection
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Enable/disable schedule inputs
         document.querySelectorAll('.day-toggle').forEach(function (checkbox) {
             checkbox.addEventListener('change', function () {
                 const day = this.getAttribute('data-day');
                 const inputs = document.querySelectorAll('.schedule-input-' + day);
-    
+
                 inputs.forEach(function (input) {
                     input.disabled = !checkbox.checked;
                 });
             });
-    
-            // Trigger change on page load in case of old values
+
+            // Trigger change on page load
             checkbox.dispatchEvent(new Event('change'));
         });
+
+        // Prefix fullname with Dr./Dra. based on gender
+        const genderSelect = document.getElementById('gender');
+        const fullnameInput = document.getElementById('fullname');
+
+        genderSelect.addEventListener('change', function () {
+            const gender = this.value;
+            let name = fullnameInput.value.trim();
+
+            name = name.replace(/^(Dr\.|Dra\.)\s*/i, '');
+
+            const prefix = gender === 'male' ? 'Dr. ' : 'Dra. ';
+            fullnameInput.value = prefix + name;
+        });
+
+        // Run on load
+        genderSelect.dispatchEvent(new Event('change'));
+
+        // Initialize Select2
+        $('.select2').select2({
+            placeholder: "-- Select Specialization --",
+            allowClear: true,
+            width: '100%'
+        });
     });
-    </script>
-    
+</script>

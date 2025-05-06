@@ -38,7 +38,10 @@ class SpecializationController extends Controller
             array_push($permissions, $permission->name);
         }
 
-        $Specialization = Specialization::where('id','=',$request->id)->get();
+        $Specialization = Specialization::find($request->id);
+            if (!$Specialization) {
+                abort(404, 'Specialization not found');
+            }
 
         $data = array(
             'permissions' => $permissions,

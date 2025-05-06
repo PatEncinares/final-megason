@@ -29,7 +29,7 @@
                         <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Enter Description:') }}</label>
                     
                         <div class="col-md-6">
-                            <textarea name="description" id="description" class="form-control" rows="3" required>{{ $data['specialization'][0]->description }}</textarea>
+                            <textarea name="description" id="description" class="form-control" rows="3" required>{{ old('description') }}</textarea>
                         </div>
                     </div>
 

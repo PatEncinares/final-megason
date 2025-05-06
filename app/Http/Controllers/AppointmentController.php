@@ -9,6 +9,7 @@ use App\ActivityLog;
 use App\Appointment;
 use App\Transaction;
 use App\PatientDetail;
+use App\DoctorSchedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -343,4 +344,48 @@ class AppointmentController extends Controller
         Alert::success('', 'Appointment canceled');
         return redirect()->back();
     }
+
+
+     public function getDoctorSchedule($id)
+    {
+        // return DoctorSchedule::where('doctor_id', $id)->get();
+
+        return DoctorSchedule::where('doctor_id', $id)->get()->map(function ($schedule) {
+            return [
+                'day_of_week' => $schedule->day_of_week,
+                'start_time' => substr($schedule->start_time, 0, 5),
+                'end_time' => substr($schedule->end_time, 0, 5),
+            ];
+        });
+    }
+
+    public function getDoctorAvailability($doctorId, $date)
+    {
+        $dayName = Carbon::parse($date)->format('l'); // e.g., "Monday"
+
+        // Find the doctor's schedule for that day
+        $schedule = DoctorSchedule::where('doctor_id', $doctorId)
+            ->where('day_of_week', $dayName)
+            ->first();
+
+        if (!$schedule) {
+            return response()->json(['available' => false]);
+        }
+
+        // Count how many appointments already exist on that date
+        $appointmentCount = Appointment::where('doctor_id', $doctorId)
+            ->where('date', $date)
+            ->where('status', '!=', 'cancelled') // Adjust this field name if needed
+            ->count();
+
+        return response()->json([
+            'available' => true,
+            'start_time' => substr($schedule->start_time, 0, 5),
+            'end_time' => substr($schedule->end_time, 0, 5),
+            'max_patients' => $schedule->max_patients,
+            'current_booked' => $appointmentCount,
+            'remaining_slots' => max($schedule->max_patients - $appointmentCount, 0),
+        ]);
+    }
+
 }

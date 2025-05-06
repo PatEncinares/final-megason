@@ -46,4 +46,10 @@ class User extends Authenticatable
     public function employeeDetails(){
         return $this->hasOne('App\Employee','user_id');
     }
+
+
+    public function doctorSchedules()
+    {
+        return $this->hasMany(DoctorSchedule::class, 'doctor_id');
+    }
 }

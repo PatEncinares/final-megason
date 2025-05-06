@@ -63879,7 +63879,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.pending {\n  color: orange;\n  font-weight: bold;\n}\n.approved {\n  color: green;\n  font-weight: bold;\n}\n.canceled {\n  color: red;\n  font-weight: bold;\n}\n.modal-body {\n  max-height: 400px;\n  overflow-y: auto;\n}\n", ""]);
+exports.push([module.i, "\n.pending {\r\n  color: orange;\r\n  font-weight: bold;\n}\n.approved {\r\n  color: green;\r\n  font-weight: bold;\n}\n.canceled {\r\n  color: red;\r\n  font-weight: bold;\n}\n.modal-body {\r\n  max-height: 400px;\r\n  overflow-y: auto;\n}\r\n", ""]);
 
 // exports
 
@@ -64544,18 +64544,21 @@ if (GlobalVue) {
 "use strict";
 
 
-// do not edit .js files directly - edit src/index.jst
-
-
+var isArray = Array.isArray;
+var keyList = Object.keys;
+var hasProp = Object.prototype.hasOwnProperty;
 
 module.exports = function equal(a, b) {
   if (a === b) return true;
 
   if (a && b && typeof a == 'object' && typeof b == 'object') {
-    if (a.constructor !== b.constructor) return false;
+    var arrA = isArray(a)
+      , arrB = isArray(b)
+      , i
+      , length
+      , key;
 
-    var length, i, keys;
-    if (Array.isArray(a)) {
+    if (arrA && arrB) {
       length = a.length;
       if (length != b.length) return false;
       for (i = length; i-- !== 0;)
@@ -64563,29 +64566,35 @@ module.exports = function equal(a, b) {
       return true;
     }
 
+    if (arrA != arrB) return false;
 
+    var dateA = a instanceof Date
+      , dateB = b instanceof Date;
+    if (dateA != dateB) return false;
+    if (dateA && dateB) return a.getTime() == b.getTime();
 
-    if (a.constructor === RegExp) return a.source === b.source && a.flags === b.flags;
-    if (a.valueOf !== Object.prototype.valueOf) return a.valueOf() === b.valueOf();
-    if (a.toString !== Object.prototype.toString) return a.toString() === b.toString();
+    var regexpA = a instanceof RegExp
+      , regexpB = b instanceof RegExp;
+    if (regexpA != regexpB) return false;
+    if (regexpA && regexpB) return a.toString() == b.toString();
 
-    keys = Object.keys(a);
+    var keys = keyList(a);
     length = keys.length;
-    if (length !== Object.keys(b).length) return false;
+
+    if (length !== keyList(b).length)
+      return false;
 
     for (i = length; i-- !== 0;)
-      if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
+      if (!hasProp.call(b, keys[i])) return false;
 
     for (i = length; i-- !== 0;) {
-      var key = keys[i];
-
+      key = keys[i];
       if (!equal(a[key], b[key])) return false;
     }
 
     return true;
   }
 
-  // true if both NaN, false otherwise
   return a!==a && b!==b;
 };
 
@@ -68764,7 +68773,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\nul li[data-v-7f5e0ecd]{\n    display: inline;\n}\n\n", ""]);
+exports.push([module.i, "\nul li[data-v-7f5e0ecd]{\r\n    display: inline;\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -69026,7 +69035,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\nh6[data-v-5bd59b53] {\n    display: inline;\n}\n", ""]);
+exports.push([module.i, "\nh6[data-v-5bd59b53] {\r\n    display: inline;\n}\r\n", ""]);
 
 // exports
 

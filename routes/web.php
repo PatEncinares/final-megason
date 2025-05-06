@@ -57,6 +57,9 @@ Auth::routes();
 
 Route::middleware('auth')->group(function () {
     // Routes for authenticated users
+
+    Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/home/new-otp','HomeController@requestNewOtp')->name('new-otp');
     Route::post('/home/validate-otp','HomeController@validateOTP')->name('validate-otp');
@@ -93,6 +96,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/appointments/cancel/{id}','AppointmentController@cancel')->name('cancel-appointment');
 
     Route::get('/profile','PatientController@profile')->name('patient-profile');
+
+    Route::get('/doctor-schedule/{id}', 'AppointmentController@getDoctorSchedule');
+    Route::get('/doctor-availability/{doctorId}/{date}', 'AppointmentController@getDoctorAvailability');
 
 
     //doctors

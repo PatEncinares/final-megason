@@ -7,6 +7,7 @@ use App\Setting;
 use Carbon\Carbon;
 use App\ActivityLog;
 use App\Appointment;
+use App\DoctorDetail;
 use App\Transaction;
 use App\PatientDetail;
 use App\DoctorSchedule;
@@ -17,6 +18,7 @@ use App\Mail\AppointmentApprovalMail;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Mail\AppointmentCancellationMail;
 use App\Mail\AppointmentConfirmationMail;
+use App\Specialization;
 
 class AppointmentController extends Controller
 {
@@ -145,11 +147,17 @@ class AppointmentController extends Controller
             ->exists();
 
         // Prevent the same user from booking a different doctor at the same time & date
+        // $userDoubleBooking = Appointment::where('date', '=', $request->date)
+        //     ->where('real_time', '=', $request->real_time)
+        //     ->where('user_id', '=', $request->patient_id)
+        //     ->where('doctor_id', '!=', $request->doctor_id) // Different doctor
+        //     ->exists();
+        // Prevent the same user from booking the same doctor on the same date
         $userDoubleBooking = Appointment::where('date', '=', $request->date)
-            ->where('real_time', '=', $request->real_time)
-            ->where('user_id', '=', $request->patient_id)
-            ->where('doctor_id', '!=', $request->doctor_id) // Different doctor
-            ->exists();
+        ->where('doctor_id', '=', $request->doctor_id)
+        ->where('user_id', '=', $request->patient_id)
+        ->exists();
+
 
         // Get appointment limits from settings
         $settings = Setting::find(1);
@@ -171,7 +179,7 @@ class AppointmentController extends Controller
             Alert::error('', 'This doctor is already booked at this date and time.');
             return redirect()->back()->withInput();
         } elseif ($userDoubleBooking) {
-            Alert::error('', 'You already have an appointment at this date and time with another doctor.');
+            Alert::error('', 'You already have an appointment with this doctor on the selected date.');
             return redirect()->back()->withInput();
         } else {
             // Save appointment
@@ -259,11 +267,13 @@ class AppointmentController extends Controller
 
         $doctors = User::where('type', '=', 2)->with('doctorDetails')->get();
         $patients = User::where('type', '=', 3)->with('patientDetails')->get();
+        $specializations = Specialization::all();
 
         $data = array(
             'permissions' => $permissions,
             'doctors'     => $doctors,
-            'patients'    => $patients
+            'patients'    => $patients,
+            'specializations' => $specializations
         );
 
         return view('appointment.create')->with('data', $data);
@@ -387,5 +397,14 @@ class AppointmentController extends Controller
             'remaining_slots' => max($schedule->max_patients - $appointmentCount, 0),
         ]);
     }
+
+    public function getDoctorsBySpecialization($id)
+{
+    $doctors = DoctorDetail::where('specialization_id', $id)
+        ->get(['user_id as id', 'fullname']);
+
+    return response()->json($doctors);
+}
+
 
 }

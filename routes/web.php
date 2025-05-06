@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\DoctorController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -99,6 +102,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/doctor-schedule/{id}', 'AppointmentController@getDoctorSchedule');
     Route::get('/doctor-availability/{doctorId}/{date}', 'AppointmentController@getDoctorAvailability');
+    Route::get('/appointments/doctors-by-specialization/{id}', [AppointmentController::class, 'getDoctorsBySpecialization']);
+
 
 
     //doctors

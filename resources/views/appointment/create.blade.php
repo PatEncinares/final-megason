@@ -35,30 +35,43 @@
                         <input type="hidden" name="patient_id" value="{{ Auth::user()->id }}">
                     @endif
 
+
+                    {{-- Specialization --}}
+                    @if(Auth::user()->type != 2)
+                    <div class="form-group row">
+                        <label for="specialization_filter" class="col-md-4 col-form-label text-md-right">Specialization:</label>
+                        <div class="col-md-6">
+                            <select id="specialization_filter" class="form-control select2" name="specialization_id" required>
+                                <option value="">-- Filter by Specialization --</option>
+                                @foreach($data['specializations'] as $spec)
+                                    <option value="{{ $spec->id }}">{{ $spec->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    @endif
+
+
                     {{-- Doctor --}}
                     @if(Auth::user()->type != 2)
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label text-md-right">Select Doctor:</label>
                             <div class="col-md-6">
-                                <select name="doctor_id" id="doctor" class="form-control" required>
+                                <select name="doctor_id" id="doctor" class="form-control select2" required disabled>
                                     <option value="" disabled selected>-- Select Doctor --</option>
-                                    @foreach($data['doctors'] as $doctor)
-                                        <option value="{{ $doctor['id'] }}" {{ old('doctor_id') == $doctor['id'] ? 'selected' : '' }}>
-                                            {{ $doctor['doctorDetails']['specialization'] }} - {{ $doctor['name'] }}
-                                        </option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>
                     @else
                         <input type="hidden" id="doctor" name="doctor_id" value="{{ Auth::user()->id }}">
                     @endif
+                
 
                     {{-- Date --}}
                     <div class="form-group row">
                         <label for="date" class="col-md-4 col-form-label text-md-right">Select Date:</label>
                         <div class="col-md-6">
-                            <input type="text" id="date" name="date" class="form-control" required>
+                            <input type="text" id="date" name="date" class="form-control" placeholder="-- Select Date --" required disabled>
                             <small id="slotCount" class="form-text text-muted mt-2" style="font-weight: bold;"></small>
                         </div>
                     </div>
@@ -116,94 +129,124 @@
         if (dateInput._flatpickr) dateInput._flatpickr.destroy();
 
         flatpickr(dateInput, {
-                dateFormat: "Y-m-d", // format sent to backend
-                altInput: true,       // enables a pretty display format
-                altFormat: "F j, Y",  // e.g., May 12, 2025
-                minDate: "today",
-                disable: [
-                    function(date) {
-                        return !allowedDayIndexes.includes(date.getDay());
-                    }
-                ],
-                onChange: function(selectedDates, dateStr) {
-                        const selected = selectedDates[0];
-                        const weekday = selected.toLocaleDateString("en-US", {
-                            weekday: 'long',
-                            timeZone: 'Asia/Manila'
-                        });
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "F j, Y",
+            minDate: "today",
+            disable: [date => !allowedDayIndexes.includes(date.getDay())],
+            placeholder: "Select Date",
+            onReady(selectedDates, dateStr, instance) {
+                instance.altInput.setAttribute('placeholder', 'Select Date');
+            },
+            onChange: function (selectedDates, dateStr) {
+                const doctorId = document.getElementById('doctor').value;
+                if (!doctorId) return;
 
-                        const doctorId = document.getElementById('doctor').value || {{ Auth::user()->type == 2 ? Auth::user()->id : 'null' }};
+                fetch(`/doctor-availability/${doctorId}/${dateStr}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const timeInput = document.getElementById('real_time');
+                        const slotCount = document.getElementById('slotCount');
 
-                        fetch(`/doctor-availability/${doctorId}/${dateStr}`)
-                            .then(res => res.json())
-                            .then(data => {
-                                const timeInput = document.getElementById('real_time');
-                                const slotCount = document.getElementById('slotCount');
+                        if (!data.available || data.remaining_slots === 0) {
+                            alert("No available slots on this date.");
+                            timeInput.disabled = true;
+                            timeInput.innerHTML = '<option value="">-- No Slots --</option>';
+                            slotCount.innerText = 'Remaining Slots: 0 (Fully Booked)';
+                            slotCount.classList.add('text-danger');
+                            return;
+                        }
 
-                                if (!data.available || data.remaining_slots === 0) {
-                                    alert("No available slots on this date.");
-                                    timeInput.disabled = true;
-                                    timeInput.innerHTML = '<option value="">-- No Slots --</option>';
-                                    slotCount.innerText = 'Remaining Slots: 0 (Fully Booked)';
-                                    slotCount.classList.add('text-danger');
-                                    return;
-                                }
-
-                                timeInput.disabled = false;
-                                generateTimeOptions(data.start_time, data.end_time);
-                                slotCount.innerText = `Remaining Slots: ${data.remaining_slots}`;
-                                slotCount.classList.remove('text-danger');
-                            })
-                            .catch(() => {
-                                const slotCount = document.getElementById('slotCount');
-                                alert("Failed to load availability.");
-                                timeInput.disabled = true;
-                                timeInput.innerHTML = '<option value="">-- Select Time --</option>';
-                                slotCount.innerText = '';
-                            });
-                    }
-            });
-
+                        timeInput.disabled = false;
+                        generateTimeOptions(data.start_time, data.end_time);
+                        slotCount.innerText = `Remaining Slots: ${data.remaining_slots}`;
+                        slotCount.classList.remove('text-danger');
+                    })
+                    .catch(() => {
+                        timeInput.disabled = true;
+                        timeInput.innerHTML = '<option value="">-- Select Time --</option>';
+                        document.getElementById('slotCount').innerText = '';
+                    });
+            }
+        });
     }
 
-     function formatAMPM(hour, minute) {
-            const h = hour % 12 || 12;
-            const m = String(minute).padStart(2, '0');
-            const ampm = hour < 12 ? 'AM' : 'PM';
-            return `${h}:${m} ${ampm}`;
-        }
-
     function generateTimeOptions(start, end) {
-            const select = document.getElementById('real_time');
-            select.innerHTML = '<option value="">-- Select Time --</option>';
+        const select = document.getElementById('real_time');
+        select.innerHTML = '<option value="">-- Select Time --</option>';
 
-            const [startHour, startMin] = start.split(':').map(Number);
-            const [endHour, endMin] = end.split(':').map(Number);
+        const [startHour, startMin] = start.split(':').map(Number);
+        const [endHour, endMin] = end.split(':').map(Number);
 
-            const startTotal = startHour * 60 + startMin;
-            const endTotal = endHour * 60 + endMin;
+        const startTotal = startHour * 60 + startMin;
+        const endTotal = endHour * 60 + endMin;
 
-            for (let t = startTotal; t <= endTotal; t += 15) {
-                const hour = Math.floor(t / 60);
-                const minute = t % 60;
-                const value = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
-                const label = formatAMPM(hour, minute);
+        for (let t = startTotal; t <= endTotal; t += 15) {
+            const hour = Math.floor(t / 60);
+            const minute = t % 60;
+            const value = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+            const label = formatAMPM(hour, minute);
 
-                const option = document.createElement('option');
-                option.value = value;
-                option.textContent = label;
-                select.appendChild(option);
-            }
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = label;
+            select.appendChild(option);
         }
+    }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const doctorSelect = document.getElementById('doctor');
-        const timeInput = document.getElementById('real_time');
-        const loggedInDoctorId = {{ Auth::user()->type == 2 ? Auth::user()->id : 'null' }};
+    function formatAMPM(hour, minute) {
+        const h = hour % 12 || 12;
+        const m = String(minute).padStart(2, '0');
+        const ampm = hour < 12 ? 'AM' : 'PM';
+        return `${h}:${m} ${ampm}`;
+    }
 
-        timeInput.disabled = true;
+    $(document).ready(function () {
+        const $doctor = $('#doctor');
+        const $date = $('#date');
+        const $time = $('#real_time');
+        const $slotCount = $('#slotCount');
 
-        function loadSchedule(doctorId) {
+        $('#specialization_filter').select2({
+            placeholder: '-- Filter by Specialization --',
+            width: '100%',
+            allowClear: true
+        });
+
+        $doctor.select2({
+            placeholder: '-- Select Doctor --',
+            width: '100%'
+        });
+
+        $('#specialization_filter').on('change', function () {
+            const specId = $(this).val();
+            if (!specId) return;
+
+            $doctor.prop('disabled', true).html('<option value="">Loading...</option>');
+            $date.prop('disabled', true).val('');
+            $time.prop('disabled', true).val('');
+            $slotCount.text('');
+
+            fetch(`/appointments/doctors-by-specialization/${specId}`)
+                .then(res => res.json())
+                .then(doctors => {
+                    let options = '<option value="">-- Select Doctor --</option>';
+                    doctors.forEach(doc => {
+                        options += `<option value="${doc.id}">${doc.fullname}</option>`;
+                    });
+                    $doctor.html(options).prop('disabled', false);
+                    $doctor.trigger('change.select2');
+                })
+                .catch(err => {
+                    console.error('Error loading doctors:', err);
+                    $doctor.html('<option value="">-- Failed to Load --</option>').prop('disabled', true);
+                });
+        });
+
+        $doctor.on('change', function () {
+            const doctorId = $(this).val();
+            if (!doctorId) return;
+
             fetch(`/doctor-schedule/${doctorId}`)
                 .then(res => res.json())
                 .then(data => {
@@ -220,25 +263,37 @@
                     });
 
                     setupFlatpickr();
-                    document.getElementById('date').value = '';
-                    timeInput.value = '';
-                    timeInput.disabled = true;
+
+                // Then manually enable the visible altInput (not the hidden one)
+                setTimeout(() => {
+                    const flatpickrInstance = $date[0]._flatpickr;
+                    if (flatpickrInstance && flatpickrInstance.altInput) {
+                        const altInput = flatpickrInstance.altInput;
+                        altInput.disabled = false;
+                        altInput.placeholder = 'Select Date';
+                        altInput.style.backgroundColor = '#ffffff';
+                        altInput.style.color = '#000000';
+                        altInput.style.cursor = 'pointer';
+                    }
+                }, 100);
+
+
+
+                    $time.prop('disabled', true).val('');
+                    $slotCount.text('');
+                    setupFlatpickr();
                 });
-        }
-
-        if (loggedInDoctorId) {
-            loadSchedule(loggedInDoctorId);
-        }
-
-        if (doctorSelect && {{ Auth::user()->type }} != 2) {
-            doctorSelect.addEventListener('change', function () {
-                if (this.value) {
-                    loadSchedule(this.value);
-                }
-            });
-        }
+        });
     });
 </script>
+<style>
+input.flatpickr-input[readonly] {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    cursor: pointer;
+}
+</style>
+
 
 @include('layouts.dashboard.footer')
 @endsection

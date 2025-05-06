@@ -14,16 +14,21 @@ class DoctorDetail extends Model
     }
 
     public function schedules()
-{
-    return $this->hasManyThrough(
-        DoctorSchedule::class,
-        User::class,
-        'id',         // foreign key on User
-        'doctor_id',  // foreign key on DoctorSchedule
-        'user_id',    // local key on DoctorDetail
-        'id'          // local key on User
-    );
-}
+    {
+        return $this->hasManyThrough(
+            DoctorSchedule::class,
+            User::class,
+            'id',         // foreign key on User
+            'doctor_id',  // foreign key on DoctorSchedule
+            'user_id',    // local key on DoctorDetail
+            'id'          // local key on User
+        );
+    }
+
+    public function specialization()
+    {
+        return $this->belongsTo(Specialization::class, 'specialization_id');
+    }
     
 
 }

@@ -51,88 +51,9 @@ class AppointmentController extends Controller
         }
     }
 
-    // public function saveAppointment(Request $request){
-    //    // check appointment avaialability
-    // //    dd($request->all());
-
-    //    $time_data = date('A',strtotime($request->real_time));
-    // //    dd($time_data);
-    //    $schedule = Appointment::where('date','=',$request->date)
-    //    ->where('time','=',$time_data)
-    //     ->where(function ($query) use ($time_data) {
-    //         $query->where('status','=',1)
-    //         ->orwhere('status','=',0);
-    //     })
-    // //    ->where('status','=',1) // approved appointment
-    //    ->count();
-
-    //     // dd($schedule);
-
-
-    //     $sameTimeDoctor = Appointment::where('date','=',$request->date)
-    //         ->where("doctor_id",$request->doctor_id)
-    //         ->where('user_id',$request->patient_id)
-    //         ->where(function ($query) use ($request) {
-    //             $query->where('time','=',$request->time)
-    //             ->orwhere('real_time','=',$request->real_time);
-    //         })
-    //         ->count();
-
-    //     $settings = Setting::find(1);
-    //     $limit = ($request->time == 'AM') ? $settings->am_limit : $settings->pm_limit;
-
-
-    //     // validate date
-    //     $today = Carbon::today();
-    //     $date  = Carbon::parse($request->date);
-    //     $time_open  = Carbon::createFromTimeString('09:00');
-    //     $time_close = Carbon::createFromTimeString('17:00');
-
-    //     if($date->lessThan($today)){
-    //         Alert::error('', 'Please select date ahead from today');
-    //         return redirect()->back()->withInput(); 
-    //     }
-    //     else{
-    //         if(!Carbon::parse($request->real_time)->between($time_open, $time_close)){
-    //             Alert::error('', 'Please select time between 9:00AM to 5:00PM');
-    //             return redirect()->back()->withInput(); 
-    //         }else{
-    //             if($schedule >= $limit){
-    //                 // no slots left for your selected schedule
-    //                 Alert::error('', 'No slots left for your selected schedule');
-    //                 return redirect()->back()->withInput(); 
-    //             }
-    //             else if($sameTimeDoctor > 0){
-    //                 Alert::error('', 'You already have an appointment with the same doctor and same schedule!');
-    //                 return redirect()->back()->withInput(); 
-    //             }
-    //             else{
-    //                 $appointment = Appointment::create([
-    //                     'doctor_id' => $request->doctor_id,
-    //                     'user_id'   => $request->patient_id,
-    //                     'date'      => $request->date,
-    //                     'real_time' => $request->real_time,
-    //                     'time'      => $time_data,
-    //                     'status'    => 0, // not yet approved
-    //                 ]);
-
-    //                 ActivityLog::create([
-    //                     'user_id' => Auth::user()->id,
-    //                     'activity' => 'Created an Appointment'
-    //                 ]);
-
-    //                 Alert::success('', 'Appointment saved');
-    //                 return redirect()->route('appointment');
-    //             }
-    //         }
-    //     }
-
-
-    // }
-
     public function saveAppointment(Request $request)
     {
-   
+    
         // Get AM/PM time format
         $time_data = date('A', strtotime($request->real_time));
 

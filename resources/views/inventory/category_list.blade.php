@@ -32,9 +32,21 @@
                             @foreach($data['categories'] as $category)
                                 <tr>
                                     <td>
-                                        <a href="{{ route('edit-category',$category->id) }}"><button class="btn btn-info" title="Edit"><i class="fa fa-edit"></i> Edit</button></a>
-                                        <a href="{{ route('delete-category', $category->id) }}"><button class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i> Delete</button></a>
+                                        <!-- Edit Button -->
+                                        <a href="{{ route('edit-category', $category->id) }}" class="btn btn-info" title="Edit">
+                                            <i class="fa fa-edit"></i> Edit
+                                        </a>
+                                    
+                                        <!-- Delete Button + Hidden Form -->
+                                        <button class="btn btn-danger" title="Delete" onclick="confirmDelete({{ $category->id }})">
+                                            <i class="fa fa-trash"></i> Delete
+                                        </button>
+                                    
+                                        <form id="delete-form-{{ $category->id }}" action="{{ route('delete-category', $category->id) }}" method="POST" style="display: none;">
+                                            @csrf
+                                        </form>
                                     </td>
+                                    
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->description }}</td>
                                     <td>{{ $category->created_at->diffForHumans() }}</td>
@@ -57,5 +69,22 @@
 
     </div>
 </main>
+<script>
+function confirmDelete(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This category will be deleted permanently.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-form-' + id).submit();
+        }
+    });
+}
+</script>
 @include('layouts.dashboard.footer')
 @endsection

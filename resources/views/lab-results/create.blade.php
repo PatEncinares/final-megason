@@ -4,6 +4,9 @@
 <main>
     <div class="container-fluid" id="app">
         <h1 class="mt-4"><img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/microscope.JPG') }}" alt="Patient Management">Laboratory</h1>
+        <a href="{{ url()->previous() }}" class="btn btn-secondary d-print-none mb-2">
+            <i class="fa fa-arrow-left"></i> Back
+        </a>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item active">Create</li>
         </ol>
@@ -17,16 +20,33 @@
                 <form method="POST" action="{{ route('lab-result-procedure') }}" aria-label="{{ __('Create Lab Result') }}" enctype="multipart/form-data">
                     @csrf
 
-                    <div class="form-group row">
+                    {{-- <div class="form-group row">
                         <label for="patient" class="col-md-4 col-form-label text-md-right">{{ __('Select Patient:') }}</label>
         
                         <div class="col-md-6">
-                            <select name="patient_id" id="patient" class="form-control{{ $errors->has('patient') ? ' is-invalid' : '' }}" required>
+                            <select name="patient_id" id="patient" class="form-control{{ $errors->has('patient') ? ' is-invalid' : '' }} select2" required>
                                 <option value="" selected disabled>-- Select patient --</option>
                                 @foreach($data['patients'] as $patient)
                                     <option value="{{ $patient['id'] }}">{{ $patient['name'] }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                    </div> --}}
+
+                    <div class="form-group row">
+                        <label for="patient_id" class="col-md-4 col-form-label text-md-right">Select Patient:</label>
+                        <div class="col-md-6">
+                            <select name="patient_id" id="patient_id" class="form-control select2" required>
+                                <option value="" disabled selected>-- Select Patient --</option>
+                                @foreach($data['patients'] as $patient)
+                                    <option value="{{ $patient->id }}" {{ old('patient_id') == $patient->id ? 'selected' : '' }}>{{ $patient->name }}</option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('patient_id'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('patient_id') }}</strong>
+                                </span>
+                            @endif
                         </div>
                     </div>
 
@@ -78,5 +98,14 @@
 
     </div>
 </main>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+            $('#patient_id').select2({
+                placeholder: '-- Select Patient --',
+                allowClear: true,
+                width: '100%'
+            });
+        });
+</script>
 @include('layouts.dashboard.footer')
 @endsection

@@ -57,10 +57,14 @@
                                     <td>{{ $patient['address'] }}</td>
                                     <td>
                                         @foreach($patient['appointments'] as $appoint)
-                                            @if($appoint->status == 1)
-                                                {{ $appoint->doctor->name }} - {{date('F d, Y',strtotime($appoint->date))}}<br>
+                                        @if($appoint->status == 1)
+                                            @if($appoint->doctor)
+                                                {{ $appoint->doctor->name }} - {{ date('F d, Y', strtotime($appoint->date)) }}<br>
+                                            @else
+                                                Doctor is no longer active<br>
                                             @endif
-                                        @endforeach
+                                        @endif
+                                    @endforeach
                                     </td>
                                 </tr>
                                  <!-- Modal -->

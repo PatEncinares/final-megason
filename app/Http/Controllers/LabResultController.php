@@ -44,14 +44,21 @@ class LabResultController extends Controller
 
         $labResult = LabResult::where('id','=',$request->id)->with('patient','patient.patientDetails','procedure','attachments')->get();
 
+        $gender = ucfirst(strtolower($labResult[0]->patient->patientDetails[0]['civil_status']));
+        $civil_status = ucfirst(strtolower($labResult[0]->patient->patientDetails[0]['gender']));
+
+        
+
+
         $data = array(
             'permissions' => $permissions,
-            'labResult'   => $labResult
+            'labResult'   => $labResult,
+            'gender' => $gender,
+            'civil_status' => $civil_status,
         );
 
+        // dd($data);
         return view('lab-results.view')->with('data',$data);
-            
-        
     }
 
     public function createLabResult(){

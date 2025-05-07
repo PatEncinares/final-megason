@@ -2,7 +2,7 @@
     <div style="break-after:page">
         <center><h2>URINALYSIS</h2></center>
 
-        <div class="table-responsive">
+        <!-- <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -18,6 +18,27 @@
                         <td>{{ data.patient.patient_details[0].age }}</td>
                         <td>{{ data.patient.patient_details[0].gender }}</td>
                         <td>{{ data.patient.patient_details[0].civil_status }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> -->
+
+        <div class="table-responsive" v-if="!data.isViewPatientMedicalHistory">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Sex</th>
+                        <th>Civil Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ data.patient.name }}</td>
+                        <td>{{ data.patient.patient_details[0].age }}</td>
+                        <td>{{ capitalize(data.patient.patient_details[0].gender) }}</td>
+                        <td>{{ capitalize(data.patient.patient_details[0].civil_status) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -134,7 +155,14 @@ export default {
         return {
 
         }
-    }
+    },
+
+    methods: {
+        capitalize(value) {
+            if (!value) return '';
+            return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+        }
+    },
 }
 </script>
 

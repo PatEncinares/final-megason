@@ -63966,6 +63966,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -68521,7 +68523,14 @@ var render = function() {
                             ]),
                             _vm._v(" "),
                             _c("td", [
-                              _vm._v(_vm._s(appointment.doctor.title_name))
+                              _vm._v(
+                                _vm._s(
+                                  appointment.doctor &&
+                                    appointment.doctor.title_name
+                                    ? appointment.doctor.title_name
+                                    : "Doctor is no longer active"
+                                )
+                              )
                             ]),
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(appointment.date))]),
@@ -69078,11 +69087,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['data'],
     data: function data() {
         return {};
+    },
+
+    methods: {
+        capitalize: function capitalize(value) {
+            if (!value) return '';
+            return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+        }
     }
 });
 
@@ -69102,31 +69139,43 @@ var render = function() {
         [
           _c("center", [_c("h2", [_vm._v("FECALYSIS")])]),
           _vm._v(" "),
-          _c("div", { staticClass: "table-responsive" }, [
-            _c("table", { staticClass: "table table-bordered" }, [
-              _vm._m(0),
-              _vm._v(" "),
-              _c("tbody", [
-                _c("tr", [
-                  _c("td", [_vm._v(_vm._s(_vm.data.patient.name))]),
+          !_vm.data.isViewPatientMedicalHistory
+            ? _c("div", { staticClass: "table-responsive" }, [
+                _c("table", { staticClass: "table table-bordered" }, [
+                  _vm._m(0),
                   _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(_vm.data.patient.patient_details[0].age))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(_vm.data.patient.patient_details[0].gender))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(
-                      _vm._s(_vm.data.patient.patient_details[0].civil_status)
-                    )
+                  _c("tbody", [
+                    _c("tr", [
+                      _c("td", [_vm._v(_vm._s(_vm.data.patient.name))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(_vm.data.patient.patient_details[0].age))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(
+                          _vm._s(
+                            _vm.capitalize(
+                              _vm.data.patient.patient_details[0].gender
+                            )
+                          )
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(
+                          _vm._s(
+                            _vm.capitalize(
+                              _vm.data.patient.patient_details[0].civil_status
+                            )
+                          )
+                        )
+                      ])
+                    ])
                   ])
                 ])
               ])
-            ])
-          ]),
+            : _vm._e(),
           _vm._v(" "),
           _c("table", { staticClass: "table" }, [
             _vm._m(1),
@@ -69356,7 +69405,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -69629,6 +69678,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {};
     },
+
+    methods: {
+        capitalize: function capitalize(value) {
+            if (!value) return '';
+            return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+        }
+    },
+
     mounted: function mounted() {
         console.log(this.data);
     }
@@ -69662,12 +69719,22 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("td", [
-                    _vm._v(_vm._s(_vm.data.patient.patient_details[0].gender))
+                    _vm._v(
+                      _vm._s(
+                        _vm.capitalize(
+                          _vm.data.patient.patient_details[0].gender
+                        )
+                      )
+                    )
                   ]),
                   _vm._v(" "),
                   _c("td", [
                     _vm._v(
-                      _vm._s(_vm.data.patient.patient_details[0].civil_status)
+                      _vm._s(
+                        _vm.capitalize(
+                          _vm.data.patient.patient_details[0].civil_status
+                        )
+                      )
                     )
                   ])
                 ])
@@ -70233,7 +70300,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -70307,6 +70374,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['data'],
     data: function data() {
         return {};
+    },
+
+
+    methods: {
+        capitalize: function capitalize(value) {
+            if (!value) return '';
+            return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+        }
     }
 });
 
@@ -70324,90 +70399,105 @@ var render = function() {
     [
       _c("center", [_c("h2", [_vm._v("ULTRASOUND")])]),
       _vm._v(" "),
-      _c("div", { staticClass: "table-responsive" }, [
-        _c("table", { staticClass: "table table-bordered" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("tbody", [
-            _c("tr", [
-              _c("td", [_vm._v(_vm._s(_vm.data.patient.name))]),
+      !_vm.data.isViewPatientMedicalHistory
+        ? _c("div", { staticClass: "table-responsive" }, [
+            _c("table", { staticClass: "table table-bordered" }, [
+              _vm._m(0),
               _vm._v(" "),
-              _c("td", [
-                _vm._v(_vm._s(_vm.data.patient.patient_details[0].age))
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _vm._v(_vm._s(_vm.data.patient.patient_details[0].gender))
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _vm._v(_vm._s(_vm.data.patient.patient_details[0].civil_status))
-              ])
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _vm.data.attachments
-          ? _c(
-              "span",
-              { staticClass: "d-print-none" },
-              [
-                _c("h5", { staticClass: "d-print-none" }, [
-                  _vm._v("Attachments:")
-                ]),
-                _vm._v(" "),
-                _vm._l(_vm.data.attachments, function(attachment, index) {
-                  return _c("span", { key: index }, [
-                    attachment.attachment_ext == "jpg" ||
-                    attachment.attachment_ext == "png"
-                      ? _c("span", [
-                          _c(
-                            "a",
-                            {
-                              attrs: {
-                                href:
-                                  "/lab-result/attachment/download/" +
-                                  attachment.id
-                              }
-                            },
-                            [
-                              _c("img", {
-                                staticClass: "img-thumbnail",
-                                attrs: {
-                                  src:
-                                    "/storage" + attachment.attachment_filepath,
-                                  alt: "...",
-                                  height: "200px",
-                                  width: "200px"
-                                }
-                              })
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("br")
-                        ])
-                      : _c("span", [
-                          _c(
-                            "a",
-                            {
-                              attrs: {
-                                href:
-                                  "/lab-result/attachment/download/" +
-                                  attachment.id
-                              }
-                            },
-                            [_vm._v(_vm._s(attachment.attachment_filename))]
-                          ),
-                          _vm._v(" "),
-                          _c("br")
-                        ])
+              _c("tbody", [
+                _c("tr", [
+                  _c("td", [_vm._v(_vm._s(_vm.data.patient.name))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(_vm.data.patient.patient_details[0].age))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(
+                      _vm._s(
+                        _vm.capitalize(
+                          _vm.data.patient.patient_details[0].gender
+                        )
+                      )
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(
+                      _vm._s(
+                        _vm.capitalize(
+                          _vm.data.patient.patient_details[0].civil_status
+                        )
+                      )
+                    )
                   ])
-                })
-              ],
-              2
-            )
-          : _vm._e()
-      ]),
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _vm.data.attachments
+              ? _c(
+                  "span",
+                  { staticClass: "d-print-none" },
+                  [
+                    _c("h5", { staticClass: "d-print-none" }, [
+                      _vm._v("Attachments:")
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.data.attachments, function(attachment, index) {
+                      return _c("span", { key: index }, [
+                        attachment.attachment_ext == "jpg" ||
+                        attachment.attachment_ext == "png"
+                          ? _c("span", [
+                              _c(
+                                "a",
+                                {
+                                  attrs: {
+                                    href:
+                                      "/lab-result/attachment/download/" +
+                                      attachment.id
+                                  }
+                                },
+                                [
+                                  _c("img", {
+                                    staticClass: "img-thumbnail",
+                                    attrs: {
+                                      src:
+                                        "/storage" +
+                                        attachment.attachment_filepath,
+                                      alt: "...",
+                                      height: "200px",
+                                      width: "200px"
+                                    }
+                                  })
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("br")
+                            ])
+                          : _c("span", [
+                              _c(
+                                "a",
+                                {
+                                  attrs: {
+                                    href:
+                                      "/lab-result/attachment/download/" +
+                                      attachment.id
+                                  }
+                                },
+                                [_vm._v(_vm._s(attachment.attachment_filename))]
+                              ),
+                              _vm._v(" "),
+                              _c("br")
+                            ])
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e()
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c("br"),
       _c("br"),
@@ -70549,7 +70639,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -70689,11 +70779,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['data'],
     data: function data() {
         return {};
+    },
+
+
+    methods: {
+        capitalize: function capitalize(value) {
+            if (!value) return '';
+            return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+        }
     }
 });
 
@@ -70711,29 +70830,43 @@ var render = function() {
     [
       _c("center", [_c("h2", [_vm._v("URINALYSIS")])]),
       _vm._v(" "),
-      _c("div", { staticClass: "table-responsive" }, [
-        _c("table", { staticClass: "table table-bordered" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("tbody", [
-            _c("tr", [
-              _c("td", [_vm._v(_vm._s(_vm.data.patient.name))]),
+      !_vm.data.isViewPatientMedicalHistory
+        ? _c("div", { staticClass: "table-responsive" }, [
+            _c("table", { staticClass: "table table-bordered" }, [
+              _vm._m(0),
               _vm._v(" "),
-              _c("td", [
-                _vm._v(_vm._s(_vm.data.patient.patient_details[0].age))
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _vm._v(_vm._s(_vm.data.patient.patient_details[0].gender))
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _vm._v(_vm._s(_vm.data.patient.patient_details[0].civil_status))
+              _c("tbody", [
+                _c("tr", [
+                  _c("td", [_vm._v(_vm._s(_vm.data.patient.name))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(_vm.data.patient.patient_details[0].age))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(
+                      _vm._s(
+                        _vm.capitalize(
+                          _vm.data.patient.patient_details[0].gender
+                        )
+                      )
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(
+                      _vm._s(
+                        _vm.capitalize(
+                          _vm.data.patient.patient_details[0].civil_status
+                        )
+                      )
+                    )
+                  ])
+                ])
               ])
             ])
           ])
-        ])
-      ]),
+        : _vm._e(),
       _vm._v(" "),
       _c("table", { staticClass: "table table-bordered" }, [
         _c("tr", [
@@ -70995,7 +71128,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -71073,6 +71206,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['data'],
     data: function data() {
         return {};
+    },
+
+    methods: {
+        capitalize: function capitalize(value) {
+            if (!value) return '';
+            return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+        }
     }
 });
 
@@ -71090,90 +71230,105 @@ var render = function() {
     [
       _c("center", [_c("h2", [_vm._v("XRAY")])]),
       _vm._v(" "),
-      _c("div", { staticClass: "table-responsive" }, [
-        _c("table", { staticClass: "table table-bordered" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("tbody", [
-            _c("tr", [
-              _c("td", [_vm._v(_vm._s(_vm.data.patient.name))]),
+      !_vm.data.isViewPatientMedicalHistory
+        ? _c("div", { staticClass: "table-responsive" }, [
+            _c("table", { staticClass: "table table-bordered" }, [
+              _vm._m(0),
               _vm._v(" "),
-              _c("td", [
-                _vm._v(_vm._s(_vm.data.patient.patient_details[0].age))
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _vm._v(_vm._s(_vm.data.patient.patient_details[0].gender))
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _vm._v(_vm._s(_vm.data.patient.patient_details[0].civil_status))
-              ])
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _vm.data.attachments
-          ? _c(
-              "span",
-              { staticClass: "d-print-none" },
-              [
-                _c("h5", { staticClass: "d-print-none" }, [
-                  _vm._v("Attachments:")
-                ]),
-                _vm._v(" "),
-                _vm._l(_vm.data.attachments, function(attachment, index) {
-                  return _c("span", { key: index }, [
-                    attachment.attachment_ext == "jpg" ||
-                    attachment.attachment_ext == "png"
-                      ? _c("span", [
-                          _c(
-                            "a",
-                            {
-                              attrs: {
-                                href:
-                                  "/lab-result/attachment/download/" +
-                                  attachment.id
-                              }
-                            },
-                            [
-                              _c("img", {
-                                staticClass: "img-thumbnail",
-                                attrs: {
-                                  src:
-                                    "/storage" + attachment.attachment_filepath,
-                                  alt: "...",
-                                  height: "200px",
-                                  width: "200px"
-                                }
-                              })
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("br")
-                        ])
-                      : _c("span", [
-                          _c(
-                            "a",
-                            {
-                              attrs: {
-                                href:
-                                  "/lab-result/attachment/download/" +
-                                  attachment.id
-                              }
-                            },
-                            [_vm._v(_vm._s(attachment.attachment_filename))]
-                          ),
-                          _vm._v(" "),
-                          _c("br")
-                        ])
+              _c("tbody", [
+                _c("tr", [
+                  _c("td", [_vm._v(_vm._s(_vm.data.patient.name))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(_vm.data.patient.patient_details[0].age))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(
+                      _vm._s(
+                        _vm.capitalize(
+                          _vm.data.patient.patient_details[0].gender
+                        )
+                      )
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(
+                      _vm._s(
+                        _vm.capitalize(
+                          _vm.data.patient.patient_details[0].civil_status
+                        )
+                      )
+                    )
                   ])
-                })
-              ],
-              2
-            )
-          : _vm._e()
-      ]),
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _vm.data.attachments
+              ? _c(
+                  "span",
+                  { staticClass: "d-print-none" },
+                  [
+                    _c("h5", { staticClass: "d-print-none" }, [
+                      _vm._v("Attachments:")
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.data.attachments, function(attachment, index) {
+                      return _c("span", { key: index }, [
+                        attachment.attachment_ext == "jpg" ||
+                        attachment.attachment_ext == "png"
+                          ? _c("span", [
+                              _c(
+                                "a",
+                                {
+                                  attrs: {
+                                    href:
+                                      "/lab-result/attachment/download/" +
+                                      attachment.id
+                                  }
+                                },
+                                [
+                                  _c("img", {
+                                    staticClass: "img-thumbnail",
+                                    attrs: {
+                                      src:
+                                        "/storage" +
+                                        attachment.attachment_filepath,
+                                      alt: "...",
+                                      height: "200px",
+                                      width: "200px"
+                                    }
+                                  })
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("br")
+                            ])
+                          : _c("span", [
+                              _c(
+                                "a",
+                                {
+                                  attrs: {
+                                    href:
+                                      "/lab-result/attachment/download/" +
+                                      attachment.id
+                                  }
+                                },
+                                [_vm._v(_vm._s(attachment.attachment_filename))]
+                              ),
+                              _vm._v(" "),
+                              _c("br")
+                            ])
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e()
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c("h4", [_vm._v("CHEST PA: ")]),
       _vm._v(" "),

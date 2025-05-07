@@ -45,7 +45,9 @@
                 </button>
               </td>
               <td>{{ appointment.patient.name }}</td>
-              <td>{{ appointment.doctor.title_name }}</td>
+              <!-- <td>{{ appointment.doctor.title_name }}</td> -->
+              <td>{{ appointment.doctor && appointment.doctor.title_name ? appointment.doctor.title_name : 'Doctor is no longer active' }}</td>
+
               <td>{{ appointment.date }}</td>
               <td>{{ appointment.real_time }}</td>
               <td>{{ appointment.time }}</td>

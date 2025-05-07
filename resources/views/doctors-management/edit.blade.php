@@ -4,9 +4,13 @@
 <main>
     <div class="container-fluid" id="app">
         <h1 class="mt-4"><img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/doctor.png') }}" alt="Patient Management">Doctors Management</h1>
+         <a href="{{ url()->previous() }}" class="btn btn-secondary d-print-none mb-2">
+                <i class="fa fa-arrow-left"></i> Back
+        </a>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item active">Edit Doctor</li>
         </ol>
+        
 
         <form method="POST" action="{{ route('update-doctor') }}" aria-label="{{ __('Edit Doctor') }}">
             @csrf

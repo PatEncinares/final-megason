@@ -4,7 +4,7 @@
             <div class="col-lg-12">
                 <center><h2>FECALYSIS</h2></center>
 
-                <div class="table-responsive">
+                <!-- <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -18,8 +18,29 @@
                             <tr>
                                 <td>{{ data.patient.name }}</td>
                                 <td>{{ data.patient.patient_details[0].age }}</td>
-                                <td>{{ data.patient.patient_details[0].gender }}</td>
-                                <td>{{ data.patient.patient_details[0].civil_status }}</td>
+                                <td>{{ data.gender[0] }}</td>
+                                <td>{{ data.civil_status[0] }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> -->
+
+                <div class="table-responsive" v-if="!data.isViewPatientMedicalHistory">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Sex</th>
+                                <th>Civil Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ data.patient.name }}</td>
+                                <td>{{ data.patient.patient_details[0].age }}</td>
+                                <td>{{ capitalize(data.patient.patient_details[0].gender) }}</td>
+                                <td>{{ capitalize(data.patient.patient_details[0].civil_status) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -98,7 +119,13 @@ export default {
         return{
 
         }
-    }
+    },
+    methods: {
+        capitalize(value) {
+            if (!value) return '';
+            return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+        }
+    },
 }
 </script>
 

@@ -37,6 +37,36 @@ class AppointmentController extends Controller
         return view('appointment.scheduler')->with('data', $data);
     }
 
+    // public function getList()
+    // {
+    //     $query = Appointment::with('doctor.doctorDetails', 'patient.patientDetails');
+
+    //     if (Auth::user()->type == 2) {
+    //         $query->where('doctor_id', Auth::user()->id);
+    //     } elseif (Auth::user()->type == 3) {
+    //         $query->where('user_id', Auth::user()->id);
+    //     }
+        
+    //     $appointments = $query->orderBy('date', 'desc')
+    //                           ->orderBy('real_time', 'desc')
+    //                           ->get();
+        
+    //     // Add prefix based on gender
+    //     foreach ($appointments as $appointment) {
+    //         $gender = strtolower(optional($appointment->doctor->doctorDetails)->gender);
+    //         $name = optional($appointment->doctor)->name;
+            
+    //         if ($gender === 'female') {
+    //             $appointment->doctor->title_name = 'Dra. ' . $name;
+    //         } else {
+    //             $appointment->doctor->title_name = 'Dr. ' . $name;
+    //         }
+    //     }
+    //     // dd($appointments);
+    //     return $appointments;
+        
+    // }
+
     public function getList()
     {
         $query = Appointment::with('doctor.doctorDetails', 'patient.patientDetails');
@@ -46,26 +76,30 @@ class AppointmentController extends Controller
         } elseif (Auth::user()->type == 3) {
             $query->where('user_id', Auth::user()->id);
         }
-        
+
         $appointments = $query->orderBy('date', 'desc')
-                              ->orderBy('real_time', 'desc')
-                              ->get();
-        
-        // Add prefix based on gender
+                            ->orderBy('real_time', 'desc')
+                            ->get();
+
+        // Add prefix based on gender or fallback if doctor is missing
         foreach ($appointments as $appointment) {
-            $gender = strtolower(optional($appointment->doctor->doctorDetails)->gender);
-            $name = optional($appointment->doctor)->name;
-            
-            if ($gender === 'female') {
-                $appointment->doctor->title_name = 'Dra. ' . $name;
+            if ($appointment->doctor && $appointment->doctor->doctorDetails) {
+                $gender = strtolower(optional($appointment->doctor->doctorDetails)->gender);
+                $name = optional($appointment->doctor)->name;
+        
+                if ($gender === 'female') {
+                    $appointment->doctor_title_name = 'Dra. ' . $name;
+                } else {
+                    $appointment->doctor_title_name = 'Dr. ' . $name;
+                }
             } else {
-                $appointment->doctor->title_name = 'Dr. ' . $name;
+                $appointment->doctor_title_name = 'Doctor is no longer available';
             }
         }
         // dd($appointments);
         return $appointments;
-        
     }
+
 
     public function saveAppointment(Request $request)
     {

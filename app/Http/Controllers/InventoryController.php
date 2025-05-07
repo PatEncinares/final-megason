@@ -57,6 +57,18 @@ class InventoryController extends Controller
 
     public function update(Request $request){
 
+        $request->validate([
+            'category_id'        => 'required|exists:categories,id',
+            'item_name'          => 'required|string|max:255',
+            'item_description'   => 'required|string',
+            'item_price'         => 'required|numeric|min:0',
+            'arrival_date'       => 'required|date',
+            'expiration_date'    => 'required|date|after_or_equal:arrival_date',
+            'quantity'           => 'required|integer|min:0',
+            'add_stock'          => 'nullable|numeric|min:0',
+            'pull_out_stock'     => 'nullable|numeric|min:0',
+        ]);
+
         $inventory = Inventory::find($request->inventory_id);
         $inventory->category_id = $request->category_id;
         $inventory->item_name = $request->item_name;
@@ -111,7 +123,18 @@ class InventoryController extends Controller
     }
 
     public function save(Request $request){
-        $new = Inventory::create([
+        $request->validate([
+            'category_id'        => 'required|exists:categories,id',
+            'item_name'          => 'required|string|max:255',
+            'item_description'   => 'required|string',
+            'item_price'         => 'required|numeric|min:0',
+            'arrival_date'       => 'required|date',
+            'expiration_date'    => 'required|date|after_or_equal:arrival_date',
+            'quantity'           => 'required|integer|min:0',
+            'add_stock'          => 'nullable|numeric|min:0',
+            'pull_out_stock'     => 'nullable|numeric|min:0',
+        ]);
+        Inventory::create([
             'category_id'        => $request->category_id,
             'item_name'          => $request->item_name,
             'item_description'   => $request->item_description,

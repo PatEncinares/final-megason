@@ -54,6 +54,10 @@ class CategoryController extends Controller
     }
 
     public function update(Request $request){
+        $request->validate([
+            'category_name' => 'required|string|max:255',
+            'description'   => 'nullable|string'
+        ]);
 
         $category = Category::find($request->category_id);
 
@@ -103,7 +107,11 @@ class CategoryController extends Controller
     }
 
     public function save(Request $request){
-        $new = Category::create([
+        $request->validate([
+            'category_name' => 'required|string|max:255',
+            'description'   => 'nullable|string'
+        ]);
+         Category::create([
             'name'          => $request->category_name,
             'description'   => $request->description
         ]);

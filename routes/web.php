@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\TransactionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -166,7 +167,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions/edit/{id}','TransactionsController@edit')->name('edit-transaction');
     Route::post('/transactions/update','TransactionsController@update')->name('update-transaction');
     Route::get('/transactions/delete/{id}','TransactionsController@delete')->name('delete-transaction');
-    Route::get('/transactions/mark_as_paid/{id}','TransactionsController@markAsPaid')->name('mark-as-paid');
+    // Route::get('/transactions/mark_as_paid/{id}','TransactionsController@markAsPaid')->name('mark-as-paid');
+    Route::post('/transactions/mark_as_paid', [TransactionsController::class, 'markAsPaid'])->name('mark-as-paid');
+
     Route::get('/transactions/view/{id}','TransactionsController@view')->name('view-transaction');
     // accounting
     Route::get('/accounting/financial-report','AccountingController@index')->name('financial-report');

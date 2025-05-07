@@ -154,24 +154,25 @@ class DoctorController extends Controller
     }
     
 
-    public function delete(Request $request){
-        $doctorsDetail = DoctorDetail::find($request->id);
-        $doctorsAccount = User::find($doctorsDetail->user_id);
-
-        $user = User::where('id', Auth::user()->id)->with('usertype','usertype.permissions')->get();
-        $permissions = [];
-        foreach($user[0]->usertype->permissions as $permission)
-        {
-            array_push($permissions, $permission->name);
+    public function delete(Request $request)
+    {
+        $doctorDetail = DoctorDetail::find($request->id);
+    
+        if ($doctorDetail) {
+            $doctorAccount = User::find($doctorDetail->user_id);
+    
+            // Delete doctor account if it exists
+            if ($doctorAccount) {
+                $doctorAccount->delete();
+            }
+    
+            // Delete doctor detail
+            $doctorDetail->delete();
         }
-        $data = array(
-            'permissions' => $permissions,
-            'doctorsDetail' => $doctorsDetail,
-            'doctorsAccount' => $doctorsAccount
-        );
-
-        return view('doctors-management.delete_confirm')->with('data',$data);
+    
+        return redirect()->route('doctors-list')->with('success', 'Doctor deleted successfully.');
     }
+    
 
     public function deleteDoctor(Request $request){
         $user = User::find($request->user_id);

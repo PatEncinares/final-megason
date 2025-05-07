@@ -37,7 +37,10 @@
                                     <td>
                                         <a href="{{ route('edit-doctor', $doctor['id'] ) }}"><button class="btn btn-info" title="Edit"><i class="fa fa-edit"></i>Edit</button></a>
                                         @if($doctor['user_id'] != Auth::user()->id)
-                                            <a href="{{ route('delete-doctor', $doctor['id']) }}"><button class="btn btn-danger" title="Delete"><i class="fa fa-trash"></i>Delete</button></a>
+                                            <button class="btn btn-danger" title="Delete"
+                                                onclick="confirmDelete({{ $doctor['id'] }})">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </button>
                                         @endif
                                     </td>
                                     <td>{{ ($doctor['gender'] === 'male' ? 'Dr.' : 'Dra.') . ' ' . $doctor['fullname'] }}</td>
@@ -64,5 +67,22 @@
 
     </div>
 </main>
+<script>
+    function confirmDelete(doctorId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This will permanently delete the doctor.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/doctors-list/delete/${doctorId}`;
+            }
+        });
+    }
+</script>
 @include('layouts.dashboard.footer')
 @endsection

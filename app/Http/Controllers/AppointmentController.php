@@ -53,7 +53,12 @@ class AppointmentController extends Controller
 
     public function saveAppointment(Request $request)
     {
-    
+        $request->validate([
+            'doctor_id' => 'required|exists:users,id',
+            'patient_id' => 'required|exists:users,id',
+            'date' => 'required|date',
+            'real_time' => 'required|date_format:H:i',
+        ]);
         // Get AM/PM time format
         $time_data = date('A', strtotime($request->real_time));
 

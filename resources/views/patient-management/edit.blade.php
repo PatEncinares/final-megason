@@ -10,6 +10,9 @@
 
         <form method="POST" action="{{ route('update-patient') }}" aria-label="{{ __('Edit Patient') }}">
             @csrf
+            <a href="{{ url()->previous() }}" class="btn btn-secondary d-print-none mb-2">
+                <i class="fa fa-arrow-left"></i> Back
+            </a>
             <h3>Personal Information</h3>
             <input type="hidden" name="id" value="{{ $data['patientDetail']['id'] }}">
             <input type="hidden" name="user_id" value="{{ $data['patientAccount']['id'] }}">

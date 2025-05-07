@@ -15,6 +15,9 @@
             </div>
             <div class="card-body">
                 <div class="col-lg-12 col-md-12">
+                    <a href="{{ url()->previous() }}" class="btn btn-secondary d-print-none mb-2">
+                        <i class="fa fa-arrow-left"></i> Back
+                    </a>
                     <button onclick="window.print()" class="btn btn-info  d-print-none" style="margin-bottom: 10px;"><i class="fa fa-print"></i> Print</button> <br>
                     <h2 style="color:#3D6B07!important">Patient Medical Record</h2>
                     <br><br>
@@ -41,11 +44,11 @@
                             @php
                                 use Illuminate\Support\Str;
                             @endphp
-                            <h6><strong>{{ $data['patientDetail']['civil_status'] }}</strong></h6>
+                            <h6><strong>{{ Str::ucfirst($data['patientDetail']['civil_status']) }}</strong></h6>
                         </div>
                         <div class="col-lg-4 col-md-4">
                             <h5 style="color:#3D6B07!important">Birth Date</h5>
-                            <h6><strong>{{ $data['patientDetail']['date_of_birth'] }}</strong></h6>
+                            <h6><strong>{{ Carbon::parse($data['patientDetail']['date_of_birth'])->format('F d, Y') }}</strong></h6>
                             <h5 style="color:#3D6B07!important">Weight (kg)</h5>
                             <h6><strong>{{ $data['patientDetail']['weight'] }}</strong></h6>
                             <h5 style="color:#3D6B07!important">Height (cm)</h5>
@@ -89,7 +92,7 @@
                                 <strong>Diagnosis :</strong> {{ $history['diagnosis'] }} <br>
                                 <strong>Treatment :</strong> {{ $history['treatment'] }} <br>
                                 <strong>Date of last visit :</strong> {{ $history['last_visit'] }} <br>
-                                <strong>Next Visit :</strong> {{ $history['next_visit'] }} <br>
+                                <strong>Next Visit :</strong> {{ \Carbon\Carbon::parse($history['next_visit'])->format('F d, Y') }} <br>
                                 <strong>Attending Doctor :</strong> {{ $history->doctor->name }} <br>
 
                             </p>

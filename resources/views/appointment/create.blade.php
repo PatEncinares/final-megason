@@ -6,90 +6,134 @@
         <h1 class="mt-4">
             <img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/appointment.JPG') }}" alt="Patient Management">Appointment Management
         </h1>
-        <ol class="breadcrumb mb-4">
+        <ol class="breadcrumb">
             <li class="breadcrumb-item active">Create Appointment</li>
         </ol>
+        <a href="{{ url()->previous() }}" class="btn btn-secondary d-print-none mb-2">
+            <i class="fa fa-arrow-left"></i> Back
+        </a>
         <div class="card mb-4">
             <div class="card-header"><i class="fas fa-table mr-1"></i>Create Appointment</div>
             <div class="card-body">
                 <form method="POST" action="{{ route('save-appointment') }}">
                     @csrf
-
+                
+                    {{-- Show all validation errors --}}
+                    {{-- @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                 --}}
                     {{-- Patient --}}
                     @if(Auth::user()->type != 3)
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-right">Select Patient:</label>
                         <div class="col-md-6">
-                            <select name="patient_id" id="patient" class="form-control" required>
-                                <option value="" disabled selected>-- Select Patient --</option>
+                            <select name="patient_id" id="patient" class="form-control {{ $errors->has('patient_id') ? 'is-invalid' : '' }}" >
+                                <option value="" disabled {{ old('patient_id') ? '' : 'selected' }}>-- Select Patient --</option>
                                 @foreach($data['patients'] as $patient)
                                     <option value="{{ $patient['id'] }}" {{ old('patient_id') == $patient['id'] ? 'selected' : '' }}>
                                         {{ $patient['name'] }}
                                     </option>
                                 @endforeach
                             </select>
+                            @if ($errors->has('patient_id'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('patient_id') }}</strong>
+                                </span>
+                            @endif
                         </div>
                     </div>
                     @else
                         <input type="hidden" name="patient_id" value="{{ Auth::user()->id }}">
                     @endif
-
+                
                     {{-- Specialization --}}
                     @if(Auth::user()->type != 2)
                     <div class="form-group row">
                         <label for="specialization_filter" class="col-md-4 col-form-label text-md-right">Specialization:</label>
                         <div class="col-md-6">
-                            <select id="specialization_filter" class="form-control select2" name="specialization_id" required>
+                            <select id="specialization_filter" class="form-control select2 {{ $errors->has('specialization_id') ? 'is-invalid' : '' }}" name="specialization_id">
                                 <option value="">-- Filter by Specialization --</option>
                                 @foreach($data['specializations'] as $spec)
-                                    <option value="{{ $spec->id }}">{{ $spec->name }}</option>
+                                    <option value="{{ $spec->id }}" {{ old('specialization_id') == $spec->id ? 'selected' : '' }}>
+                                        {{ $spec->name }}
+                                    </option>
                                 @endforeach
                             </select>
+                            @if ($errors->has('specialization_id'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('specialization_id') }}</strong>
+                                </span>
+                            @endif
                         </div>
                     </div>
                     @endif
-
+                
                     {{-- Doctor --}}
                     @if(Auth::user()->type != 2)
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-right">Select Doctor:</label>
                         <div class="col-md-6">
-                            <select name="doctor_id" id="doctor" class="form-control select2" required disabled>
+                            <select name="doctor_id" id="doctor" class="form-control select2 {{ $errors->has('doctor_id') ? 'is-invalid' : '' }}" disabled >
                                 <option value="" disabled selected>-- Select Doctor --</option>
                             </select>
+                            @if ($errors->has('doctor_id'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('doctor_id') }}</strong>
+                                </span>
+                            @endif
                         </div>
                     </div>
                     @else
                         <input type="hidden" id="doctor" name="doctor_id" value="{{ Auth::user()->id }}">
                     @endif
-
+                
                     {{-- Date --}}
                     <div class="form-group row">
                         <label for="date_display" class="col-md-4 col-form-label text-md-right">Select Date:</label>
                         <div class="col-md-6">
-                            <input type="text" id="date_display" class="form-control" placeholder="-- Select Date --" required readonly>
-                            <input type="hidden" id="date" name="date">
+                            <input type="text" id="date_display" class="form-control" placeholder="-- Select Date --" readonly>
+                            <input type="hidden" id="date" name="date" value="{{ old('date') }}">
                             <small id="slotCount" class="form-text text-muted mt-2" style="font-weight: bold;"></small>
+                            @if ($errors->has('date'))
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong>{{ $errors->first('date') }}</strong>
+                                </span>
+                            @endif
                         </div>
                     </div>
-
+                
                     {{-- Time --}}
                     <div class="form-group row">
                         <label for="real_time" class="col-md-4 col-form-label text-md-right">Select Time:</label>
                         <div class="col-md-6">
-                            <select name="real_time" id="real_time" class="form-control" required disabled>
+                            <select name="real_time" id="real_time" class="form-control {{ $errors->has('real_time') ? 'is-invalid' : '' }}" disabled >
                                 <option value="">-- Select Time --</option>
                             </select>
+                            @if ($errors->has('real_time'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('real_time') }}</strong>
+                                </span>
+                            @endif
                         </div>
                     </div>
-
+                
                     {{-- Submit --}}
                     <div class="form-group row">
                         <div class="col-md-6 offset-md-4">
-                            <button class="btn btn-primary" type="submit"><i class="fa fa-calendar"></i> Set Appointment</button>
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fa fa-calendar"></i> Set Appointment
+                            </button>
                         </div>
                     </div>
                 </form>
+                
             </div>
         </div>
     </div>

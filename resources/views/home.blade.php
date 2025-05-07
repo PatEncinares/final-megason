@@ -3,189 +3,278 @@
 @section('content')
 <main>
     <div class="container-fluid" id="app">
-        <h1 class="mt-4"><img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/home.jpg') }}" alt="Patient Management"> Home</h1>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Dashboard</li>
-        </ol>
+        <h1 class="mt-4 d-flex justify-content-between align-items-center">
+            <span>Welcome, {{ $data['user'][0]->name }}</span>
+            <span id="live-datetime" class="live-clock text-right"></span>
+        </h1>
 
+        <ol class="breadcrumb mb-4"><li class="breadcrumb-item active">Dashboard</li></ol>
+
+        {{-- Stats Cards --}}
         <div class="row">
-            <div class="col-12">
-                <h4>Welcome {{ $data['user'][0]->name }}</h4>
-                {{-- @if(Auth::user()->type != 1 && Auth::user()->type != 2 && Auth::user()->type != 3)
-                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                    <div class="btn-group mr-2" role="group" aria-label="First group">
-                      <a href="{{ route('time-in') }}"><button type="button" class="btn btn-secondary"><i class="fas fa-clock"></i> TIME IN</button></a>
-                    </div>
-                    <div class="btn-group mr-2" role="group" aria-label="Second group">
-                      <a href="{{ route('time-out') }}"><button type="button" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> TIME OUT</button></a>
-                    </div>
+            @if(in_array("appointments", $data['permissions']))
+                <div class="col-md-3 mb-4">
+                    <a href="{{ route('appointment') }}" class="text-decoration-none">
+                        <div class="card bg-primary text-white shadow hover-lift">
+                            <div class="card-body">All Appointments</div>
+                            <div class="card-footer h3" id="stat-all">...</div>
+                        </div>
+                    </a>
                 </div>
-                @endif --}}
-                <hr>
-                <h5>Quick Links</h5>
-                <div class="row">
-                    @if(in_array("profile",$data['permissions']))
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/profile.JPG') }}" alt="Patient Management">
-                                    Profile
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    @if(Auth::user()->type == 2)
-                                        <a class="small stretched-link" href="{{ route('get-doctor-list') }}">View</a>
-                                    @elseif(Auth::user()->type == 3)
-                                        <a class="small stretched-link" href="{{ route('patients-list') }}">View</a>
-                                    @endif
-                                    
-                                    <div class="small"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
+                <div class="col-md-3 mb-4">
+                    <a href="{{ route('appointment') }}" class="text-decoration-none">
+                        <div class="card bg-success text-white shadow hover-lift">
+                            <div class="card-body">Today</div>
+                            <div class="card-footer h3" id="stat-today">...</div>
                         </div>
-                    @endif
-                    
-                    @if(in_array("patient_management",$data['permissions']))
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/patient.png') }}" alt="Patient Management">
-                                    Patient Management
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small stretched-link" href="{{ route('patients-list') }}">View</a>
-                                    <div class="small"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    @if(in_array("appointments",$data['permissions']))
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/appointment.JPG') }}" alt="Patient Management">
-                                    Appointments
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small stretched-link" href="{{ url('/appointments') }}">View</a>
-                                    <div class="small"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    @if(in_array("doctors_management",$data['permissions']))
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/doctor.png') }}" alt="Patient Management">
-                                    Doctors Management
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small stretched-link" href="{{  url('/doctors-list')  }}">View</a>
-                                    <div class="small"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    @if((Auth::user()->type == 7))
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/transaction.JPG') }}" alt="Patient Management">
-                                    Transactions
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small stretched-link" href="{{  route('get-transactions-list')  }}">View</a>
-                                    <div class="small"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    @if(in_array("laboratory_management",$data['permissions']))
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/microscope.JPG') }}" alt="Patient Management">
-                                    Laboratory
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small stretched-link" href="{{  route('lab-results-list')  }}">View</a>
-                                    <div class="small"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    {{-- @if(in_array("hr",$data['permissions']))
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/human_resource.JPG') }}" alt="Patient Management">
-                                    Human Resource
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small stretched-link" href="{{  route('get-employees-list')  }}">View</a>
-                                    <div class="small"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif --}}
-
-                    @if(in_array("inventory",$data['permissions']))
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/inventory.JPG') }}" alt="Patient Management">
-                                    Inventory
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small stretched-link" href="{{  route('get-inventory-list')  }}">View</a>
-                                    <div class="small"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    @if(in_array("accounting",$data['permissions']))
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/accounting.JPG') }}" alt="Patient Management">
-                                    Accounting
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small stretched-link" href="{{  route('financial-report')  }}">View</a>
-                                    <div class="small"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    @if(in_array("user_accounts",$data['permissions']))
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/user_management.JPG') }}" alt="Patient Management">
-                                    User Accounts
-                                </div>
-                                <div class="card-footer d-flex align-items-center justify-content-between">
-                                    <a class="small stretched-link" href="{{  route('user-list')  }}">View</a>
-                                    <div class="small"><i class="fas fa-angle-right"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
+                    </a>
                 </div>
+                <div class="col-md-3 mb-4">
+                    <a href="{{ route('appointment') }}" class="text-decoration-none">
+                        <div class="card bg-info text-white shadow hover-lift">
+                            <div class="card-body">New</div>
+                            <div class="card-footer h3" id="stat-new">...</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <a href="{{ route('appointment') }}" class="text-decoration-none">
+                        <div class="card bg-danger text-white shadow hover-lift">
+                            <div class="card-body">Cancelled</div>
+                            <div class="card-footer h3" id="stat-cancelled">...</div>
+                        </div>
+                    </a>
+                </div>
+            @endif
+        </div>
 
+        {{-- Additional Stats --}}
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <a href="{{ route('patients-list') }}" class="text-decoration-none">
+                    <div class="card bg-secondary text-white shadow hover-lift">
+                        <div class="card-body">Total Patients</div>
+                        <div class="card-footer h3" id="stat-patients">...</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 mb-4">
+                <a href="{{ route('user-list') }}" class="text-decoration-none">
+                    <div class="card bg-dark text-white shadow hover-lift">
+                        <div class="card-body">Total Staff</div>
+                        <div class="card-footer h3" id="stat-staff">...</div>
+                    </div>
+                </a>
             </div>
         </div>
-            
 
+        {{-- Charts --}}
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card shadow mb-4 hover-lift">
+                    <div class="card-header">Appointments Overview</div>
+                    <div class="card-body">
+                        <canvas id="appointmentsChart" height="150"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow mb-4 hover-lift">
+                    <div class="card-header">Appointments Booked</div>
+                    <div class="card-body">
+                        <canvas id="donutChart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Sales Chart --}}
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card shadow mb-4 hover-lift">
+                    <div class="card-header">Sales Overview</div>
+                    <div class="card-body">
+                        <canvas id="salesChart" height="120"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+     {{-- Upcoming Appointments --}}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow hover-lift">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Upcoming Appointments</span>
+                <a href="{{ route('appointment') }}" class="btn btn-sm btn-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-striped mb-0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="upcoming-appointments">
+                        <tr><td colspan="4" class="text-center">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        {{-- System Logs --}}
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card shadow hover-lift">
+                    <div class="card-header">System Logs</div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush" id="system-logs">
+                            <li class="list-group-item text-center">Loading...</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
-@include('layouts.dashboard.footer')
+
+{{-- Scripts --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    fetch('/home_dashboard')
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('stat-all').innerText = data.stats.all;
+            document.getElementById('stat-today').innerText = data.stats.today;
+            document.getElementById('stat-new').innerText = data.stats.new;
+            document.getElementById('stat-cancelled').innerText = data.stats.cancelled;
+            document.getElementById('stat-patients').innerText = data.stats.patients;
+            document.getElementById('stat-staff').innerText = data.stats.staff;
+
+            new Chart(document.getElementById("appointmentsChart"), {
+                type: 'line',
+                data: {
+                    labels: data.chart.labels,
+                    datasets: data.chart.datasets
+                },
+                options: { responsive: true }
+            });
+
+            if (data.breakdown) {
+                new Chart(document.getElementById("donutChart"), {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.breakdown.labels,
+                        datasets: [{
+                            data: data.breakdown.values,
+                            backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        cutout: '70%',
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            }
+
+            new Chart(document.getElementById("salesChart"), {
+                type: 'bar',
+                data: {
+                    labels: ['Today', 'This Week', 'This Month', 'This Year'],
+                    datasets: [{
+                        label: '₱ Sales',
+                        data: data.sales,
+                        backgroundColor: ['#17a2b8', '#6f42c1', '#ffc107', '#28a745']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // Upcoming Appointments
+            const upcomingBody = document.getElementById('upcoming-appointments');
+            upcomingBody.innerHTML = '';
+            if (data.upcoming_appointments && data.upcoming_appointments.length) {
+                data.upcoming_appointments.forEach(app => {
+                    upcomingBody.innerHTML += `
+                        <tr>
+                            <td>${app.name}</td>
+                            <td>${app.doctor}</td>
+                            <td>${app.date}</td>
+                            <td>${app.time}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                upcomingBody.innerHTML = `<tr><td colspan="4" class="text-center">No upcoming appointments.</td></tr>`;
+            }
+
+            // System Logs
+            const logsList = document.getElementById('system-logs');
+            logsList.innerHTML = '';
+            if (data.system_logs && data.system_logs.length) {
+                data.system_logs.forEach(log => {
+                    logsList.innerHTML += `
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><strong>${log.user}</strong> - ${log.activity}</span>
+                            <span class="text-muted small">${log.created_at}</span>
+                        </li>
+                    `;
+                });
+            } else {
+                logsList.innerHTML = `<li class="list-group-item text-center">No system logs available.</li>`;
+            }
+
+        })
+        .catch(err => {
+            console.error('Dashboard fetch error:', err);
+        });
+});
+function updateLiveTime() {
+        const now = new Date();
+        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        const date = now.toLocaleDateString(undefined, options);
+        const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        document.getElementById('live-datetime').textContent = `${date} ${time}`;
+    }
+
+    setInterval(updateLiveTime, 1000);
+    updateLiveTime(); // run once immediately
+</script>
+
+{{-- Hover Animation Style --}}
+<style>
+.hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+.live-clock {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #6c757d;
+    line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+    .live-clock {
+        font-size: 1.4rem;
+    }
+}
+</style>
 @endsection

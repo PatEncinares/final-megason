@@ -55,9 +55,9 @@
 </nav>
 
 <!-- Main Content -->
-<div class="container mt-5">
+{{-- <div class="container mt-5">
     <h1>Welcome to Megason</h1>
-</div>
+</div> --}}
 
 <!-- JS dependencies (jQuery, Popper.js, Bootstrap) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -65,6 +65,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
     Route::get('/home', 'HomeController@index')->name('home');
+
+    Route::get('/home_dashboard', 'HomeController@overview');
     Route::get('/home/new-otp','HomeController@requestNewOtp')->name('new-otp');
     Route::post('/home/validate-otp','HomeController@validateOTP')->name('validate-otp');
 

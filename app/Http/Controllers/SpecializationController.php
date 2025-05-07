@@ -54,6 +54,10 @@ class SpecializationController extends Controller
     }
 
     public function update(Request $request){
+        $request->validate([
+            'specialization_name' => 'required|string|unique:specializations,name,' . $request->specialization_id,
+            'description' => 'nullable|string|max:255'
+        ]);
 
         $Specialization = Specialization::find($request->specialization_id);
 

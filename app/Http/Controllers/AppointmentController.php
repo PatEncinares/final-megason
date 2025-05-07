@@ -82,20 +82,39 @@ class AppointmentController extends Controller
                             ->get();
 
         // Add prefix based on gender or fallback if doctor is missing
-        foreach ($appointments as $appointment) {
-            if ($appointment->doctor && $appointment->doctor->doctorDetails) {
-                $gender = strtolower(optional($appointment->doctor->doctorDetails)->gender);
-                $name = optional($appointment->doctor)->name;
+        // foreach ($appointments as $appointment) {
+        //     $doctor = $appointment->doctor;
+        //     $doctorDetails = optional($doctor)->doctorDetails;
         
-                if ($gender === 'female') {
-                    $appointment->doctor_title_name = 'Dra. ' . $name;
-                } else {
-                    $appointment->doctor_title_name = 'Dr. ' . $name;
-                }
+        //     if ($doctor && !empty($doctor->name)) {
+        //         $gender = strtolower(optional($doctorDetails)->gender);
+        //         $name = $doctor->name;
+        
+        //         if ($gender === 'female') {
+        //             $appointment->doctor_title_name = 'Dra. ' . $name;
+        //         } else {
+        //             $appointment->doctor_title_name = 'Dr. ' . $name;
+        //         }
+        //     } else {
+        //         $appointment->doctor_title_name = 'Doctor is no longer available';
+        //     }
+        // }
+        foreach ($appointments as $appointment) {
+            $doctor = $appointment->doctor;
+            $doctorDetails = optional($doctor)->doctorDetails;
+        
+            if ($doctor && !empty($doctor->name)) {
+                $gender = strtolower(optional($doctorDetails)->gender);
+                $prefix = $gender === 'female' ? 'Dra. ' : 'Dr. ';
+                $appointment->doctor->title_name = $prefix . $doctor->name;
             } else {
-                $appointment->doctor_title_name = 'Doctor is no longer available';
+                $appointment->doctor = (object)[
+                    'title_name' => 'Doctor is no longer active'
+                ];
             }
         }
+        
+
         // dd($appointments);
         return $appointments;
     }

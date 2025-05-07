@@ -4,6 +4,10 @@
 <main>
     <div class="container-fluid" id="app">
         <h1 class="mt-4"><img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/accounting.JPG') }}" alt="Patient Management">Accounting</h1>
+        <a href="{{ url()->previous() }}" class="btn btn-secondary d-print-none mb-2">
+            <i class="fa fa-arrow-left"></i> Back
+        </a>
+
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item active">Daily Earnings Report</li>
         </ol>
@@ -37,7 +41,7 @@
                                 <td><a href="{{ route('view-transaction',$transaction->id) }}">{{ str_pad($transaction->id, 6, '0', STR_PAD_LEFT) }}</a></td>
                                 <td>{{ $transaction->created_at->format('M d, Y') }}</td>
                                 <td>{{ $transaction->patient->name }}</td>
-                                <td>{{ $transaction->doctor->name }}</td>
+                                <td>{{ $transaction->doctor ? $transaction->doctor->name : 'Doctor no longer active' }}</td>
                                 <td>{{ $transaction->doctor_fee }}</td>
                                 <td>{{ $transaction->lab_fee }}</td>
                                 <td>{{ $transaction->total_amount }}</td>

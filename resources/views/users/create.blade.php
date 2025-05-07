@@ -4,6 +4,10 @@
 <main>
     <div class="container-fluid" id="app">
         <h1 class="mt-4"><img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/user_management.JPG') }}" alt="Patient Management">Users</h1>
+        <a href="{{ url()->previous() }}" class="btn btn-secondary d-print-none mb-2">
+            <i class="fa fa-arrow-left"></i> Back
+        </a>
+
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item active">Create User</li>
         </ol>
@@ -20,23 +24,22 @@
                     
                     <div class="form-group row">
                         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name:') }}</label>
-        
+                    
                         <div class="col-md-6">
-                            <input type="text" id="name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required>
+                            <input type="text" id="name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}">
+                            @if ($errors->has('name'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('name') }}</strong>
+                                </span>
+                            @endif
                         </div>
-
-                        @if ($errors->has('name'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('name') }}</strong>
-                            </span>
-                        @endif
                     </div>
 
                     <div class="form-group row">
                         <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('Email:') }}</label>
         
                         <div class="col-md-6">
-                            <input type="email" id="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
+                            <input type="email" id="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" >
                             <small>Note: Please input a valid and active email address, a temporary password will be sent to the email address.</small>
                             @if ($errors->has('email'))
                                 {{-- {{ dd($errors->first('email')) }} --}}
@@ -53,7 +56,7 @@
                         <label for="contact_number" class="col-md-4 col-form-label text-md-right">{{ __('Contact Number:') }}</label>
         
                         <div class="col-md-6">
-                            <input type="text" id="contact_number" class="form-control{{ $errors->has('contact_number') ? ' is-invalid' : '' }}" name="contact_number" value="{{ old('contact_number') }}" required>
+                            <input type="text" id="contact_number" class="form-control{{ $errors->has('contact_number') ? ' is-invalid' : '' }}" name="contact_number" value="{{ old('contact_number') }}" >
                             <small>Note: (include country code! e.g +639351234567) Please input a valid and active contact number, your OTP will be sent on this number.</small>
                             @if ($errors->has('contact_number'))
                                 <span class="invalid-feedback" role="alert">
@@ -67,12 +70,17 @@
                         <label for="user_type" class="col-md-4 col-form-label text-md-right">{{ __('User Type:') }}</label>
         
                         <div class="col-md-6">
-                            <select name="user_type" id="" class="form-control" required>
+                            <select name="user_type" id="" class="form-control{{ $errors->has('user_type') ? ' is-invalid' : '' }}">
                                 <option value="" selected disabled>-- Select User Type --</option>
                                 @foreach($data['types'] as $usertype)
                                     <option value="{{ $usertype->id }}">{{ $usertype->name }}</option>
                                 @endforeach
-                            </select>                            
+                            </select>
+                            @if ($errors->has('user_type'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('user_type') }}</strong>
+                            </span>
+                        @endif                            
                         </div>
                     </div>
                     

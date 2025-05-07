@@ -142,7 +142,7 @@ class HomeController extends Controller
         $cancelledCounts = [];
         for ($i = 1; $i <= 6; $i++) {
             $bookedCounts[] = Appointment::whereMonth('date', $i)->count();
-            $cancelledCounts[] = Appointment::whereMonth('date', $i)->where('status', 0)->count();
+            $cancelledCounts[] = Appointment::whereMonth('date', $i)->where('status', 2)->count();
         }
     
         // Upcoming appointments (next 7 days)
@@ -179,7 +179,7 @@ class HomeController extends Controller
                 'all' => Appointment::count(),
                 'today' => Appointment::whereDate('date', $today)->count(),
                 'new' => Appointment::whereDate('created_at', $today)->count(),
-                'cancelled' => Appointment::where('status', 0)->count(),
+                'cancelled' => Appointment::where('status', 2)->count(),
                 'patients' => User::where('type', 3)->count(),
                 'staff' => User::where('type', '!=', 3)->count(),
             ],

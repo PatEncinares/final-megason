@@ -53,15 +53,37 @@ class UsersController extends Controller
 
     public function save(Request $request){
         // create user
-        $validate = $request->validate([
-            'name' => 'required|string|max:255|alpha_spaces',
+        $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[a-zA-Z\s]+$/'
+            ],
             'email' => 'required|string|email|max:255|unique:users',
-            'contact_number' => 'required|regex:(^(\+)(\d){12}$)|max:13',
-        ],[
-            'email.unique' => 'This email already exists in the system',
-            'contact_number.regex' => 'Invalid phone number format, include the country code in the phone number (e.g +639123456789)',
-            'contact_number.max' => 'Invalid phone number length, must be 13 characters max including the +639 area code'
+            'contact_number' => [
+                'required',
+                'regex:/^(\+)(\d{12})$/',
+                'max:13'
+            ],
+            'user_type' => 'required|in:admin,doctor,staff', // adjust values to your actual roles
+        ], [
+            'name.required' => 'Name is required.',
+            'name.string' => 'Name must be a valid string.',
+            'name.regex' => 'Name must only contain letters and spaces.',
+        
+            'email.required' => 'Email is required.',
+            'email.email' => 'Enter a valid email address.',
+            'email.unique' => 'This email already exists in the system.',
+        
+            'contact_number.required' => 'Contact number is required.',
+            'contact_number.regex' => 'Invalid phone number format. Use format like +639123456789.',
+            'contact_number.max' => 'Phone number must be 13 characters max, including +63 prefix.',
+        
+            'user_type.required' => 'User type is required.',
+            'user_type.in' => 'User type must be one of the following: admin, doctor, or staff.',
         ]);
+        
 
 
         $tempPass = substr(str_shuffle(uniqid()), 0, 6);
@@ -134,6 +156,37 @@ class UsersController extends Controller
     }
 
     public function update(Request $request){
+        $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[a-zA-Z\s]+$/'
+            ],
+            'email' => 'required|string|email|max:255|unique:users,email,' . $request->user_id,
+            'contact_number' => [
+                'required',
+                'regex:/^(\+)(\d{12})$/',
+                'max:13'
+            ],
+            // 'user_type' => 'required|in:admin,doctor,staff', // adjust values to your actual roles
+        ], [
+            'name.required' => 'Name is required.',
+            'name.string' => 'Name must be a valid string.',
+            'name.regex' => 'Name must only contain letters and spaces.',
+        
+            'email.required' => 'Email is required.',
+            'email.email' => 'Enter a valid email address.',
+            'email.unique' => 'This email already exists in the system.',
+        
+            'contact_number.required' => 'Contact number is required.',
+            'contact_number.regex' => 'Invalid phone number format. Use format like +639123456789.',
+            'contact_number.max' => 'Phone number must be 13 characters max, including +63 prefix.',
+        
+            // 'user_type.required' => 'User type is required.',
+            // 'user_type.in' => 'User type must be one of the following: admin, doctor, or staff.',
+        ]);
+        
         $user = User::where('id','=',$request->user_id)->get();
 
         if($user[0]->type == '2'){ // if type is doctor
@@ -178,14 +231,14 @@ class UsersController extends Controller
             'user'      => $user[0],
             'tempPass'  => $tempPass
         ];
-        Mail::to($user[0]->email)->send(new \App\Mail\UserCreated($data));
+        // Mail::to($user[0]->email)->send(new \App\Mail\UserCreated($data));
 
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Updated a User account'
         ]);
 
-        Alert::success('User Updated!', 'A new temporary password has been sent to the email address you provided.');
+        Alert::success('User Updated!');
         return redirect()->route('user-list');
     }
 

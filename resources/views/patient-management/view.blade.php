@@ -93,7 +93,7 @@
                                 <strong>Treatment :</strong> {{ $history['treatment'] }} <br>
                                 <strong>Date of last visit :</strong> {{ $history['last_visit'] }} <br>
                                 <strong>Next Visit :</strong> {{ \Carbon\Carbon::parse($history['next_visit'])->format('F d, Y') }} <br>
-                                <strong>Attending Doctor :</strong> {{ $history->doctor->name }} <br>
+                                <strong>Attending Doctor :</strong> {{ optional($history->doctor)->name ?? 'Doctor is no longer active' }} <br> <br>
 
                             </p>
                             <hr>

@@ -28,7 +28,8 @@
                             @foreach($data['activities'] as $activity)
                             <tr>
                                 <td>{{ $activity->id }}</td>
-                                <td>{{ $activity->user->name }}</td>
+                                {{-- <td>{{ $activity->user->name }}</td> --}}
+                                <td>{{ $activity->user ? $activity->user->name : 'User Deleted' }}</td>
                                 <td>{{ $activity->activity }}</td>
                                 <td>{{ \Carbon\Carbon::parse($activity->created_at)->format('M d, Y, h:m a')}}</td>
                             </tr>

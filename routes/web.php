@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TransactionsController;
 
 /*
@@ -20,6 +21,8 @@ Route::post('/signin','SigninController@authenticate')->name('signin');
 Route::get('/staff_panel_login', function() {
    return view('auth.staff_login_page'); 
 });
+
+
 
 Route::post('/staff_signin','SigninController@authenticate_staff_login')->name('staff_signin');
 
@@ -67,6 +70,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/home/new-otp','HomeController@requestNewOtp')->name('new-otp');
     Route::post('/home/validate-otp','HomeController@validateOTP')->name('validate-otp');
+
+    Route::get('/home_dashboard', [HomeController::class, 'overview'])->name('home_dashboard');
+
 
     // Patient Management
     Route::get('/patients-list',"PatientController@index")->name('patients-list');

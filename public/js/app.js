@@ -63968,6 +63968,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -68524,12 +68529,14 @@ var render = function() {
                             _vm._v(" "),
                             _c("td", [
                               _vm._v(
-                                _vm._s(
-                                  appointment.doctor &&
-                                    appointment.doctor.title_name
-                                    ? appointment.doctor.title_name
-                                    : "Doctor is no longer active"
-                                )
+                                "\n              " +
+                                  _vm._s(
+                                    appointment.doctor &&
+                                      appointment.doctor.title_name
+                                      ? appointment.doctor.title_name
+                                      : "Doctor is no longer active"
+                                  ) +
+                                  "\n            "
                               )
                             ]),
                             _vm._v(" "),

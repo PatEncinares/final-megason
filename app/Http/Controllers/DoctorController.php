@@ -88,6 +88,10 @@ class DoctorController extends Controller
 
     public function update(Request $request)
     {
+        $request->merge([
+            'fullname' => preg_replace('/^(Dr\.?|Dra\.?)\s*/i', '', $request->fullname)
+        ]);
+        
         $request->validate([
             'fullname' => [
                 'required',

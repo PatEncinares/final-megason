@@ -8,6 +8,10 @@
                  src="{{ asset('assets/quick_links/transaction.JPG') }}" alt="Patient Management">
             Transactions
         </h1>
+        <a href="{{ url()->previous() }}" class="btn btn-secondary d-print-none mb-2">
+            <i class="fa fa-arrow-left"></i> Back
+        </a>
+
         <ol class="breadcrumb mb-4 d-print-none">
             <li class="breadcrumb-item active">View Transaction</li>
         </ol>

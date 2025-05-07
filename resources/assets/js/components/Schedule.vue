@@ -32,27 +32,20 @@
           </thead>
           <tbody v-if="appointments.length">
             <tr v-for="(appointment, index) in appointments" :key="index">
-              <td v-if="appointment.status == 0">
-                <span v-if="user_data.type == 3">
-                  <a :href="'/appointments/cancel/' + appointment.id">
-                    <button class="btn btn-danger"><i class="fa fa-times"></i> Cancel</button>
-                  </a>
-                </span>
-                <span v-else-if="user_data.type == 4 || user_data.type == 1">
-                  <a :href="'/appointments/approve/' + appointment.id">
-                    <button class="btn btn-info"><i class="fa fa-check"></i> Approve</button>
-                  </a>
-                  <a :href="'/appointments/cancel/' + appointment.id">
-                    <button class="btn btn-danger"><i class="fa fa-times"></i> Cancel</button>
-                  </a>
-                </span>
-              </td>
-              <td v-else>
-                <button class="btn btn-info" disabled v-if="appointment.status == 1"><i class="fa fa-check"></i> Approved</button>
-                <button class="btn btn-danger" disabled v-else-if="appointment.status == 2"><i class="fa fa-times"></i> Canceled</button>
+              <td>
+                <button
+                  v-if="appointment.status !== 2"
+                  @click="confirmCancel(appointment.id)"
+                  class="btn btn-danger"
+                >
+                  <i class="fa fa-times"></i> Cancel
+                </button>
+                <button v-else disabled class="btn btn-danger">
+                  <i class="fa fa-times"></i> Canceled
+                </button>
               </td>
               <td>{{ appointment.patient.name }}</td>
-              <td>{{ appointment.doctor.name }}</td>
+              <td>{{ appointment.doctor.title_name }}</td>
               <td>{{ appointment.date }}</td>
               <td>{{ appointment.real_time }}</td>
               <td>{{ appointment.time }}</td>
@@ -130,7 +123,9 @@ export default {
     getAppointments() {
       this.$http.get('/get-appointments')
         .then((response) => {
+          console.log(response.data);
           this.appointments = response.data;
+          
         })
         .catch((error) => {
           console.error('Error fetching appointments:', error);
@@ -200,7 +195,23 @@ export default {
           <p><strong>Status:</strong> ${app.status == 1 ? 'Approved' : app.status == 2 ? 'Canceled' : 'Pending'}</p>
         `
       });
-    }
+    },
+    confirmCancel(appointmentId) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "This will cancel the appointment.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, cancel it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = `/appointments/cancel/${appointmentId}`;
+        }
+      });
+    },
+
   }
 };
 </script>

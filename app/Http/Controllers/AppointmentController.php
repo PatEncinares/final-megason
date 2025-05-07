@@ -39,16 +39,32 @@ class AppointmentController extends Controller
 
     public function getList()
     {
+        $query = Appointment::with('doctor.doctorDetails', 'patient.patientDetails');
+
         if (Auth::user()->type == 2) {
-            // if doctor, show all schedules for the doctor
-            return Appointment::where('doctor_id', Auth::user()->id)->with('doctor.doctorDetails', 'patient.patientDetails')->get();
-        } else if (Auth::user()->type == 3) {
-            // if patient, show all schedules for the patient
-            return Appointment::where('user_id', Auth::user()->id)->with('doctor.doctorDetails', 'patient.patientDetails')->get();
-        } else {
-            // if others = get all appointments
-            return Appointment::with('doctor.doctorDetails', 'patient.patientDetails')->get();
+            $query->where('doctor_id', Auth::user()->id);
+        } elseif (Auth::user()->type == 3) {
+            $query->where('user_id', Auth::user()->id);
         }
+        
+        $appointments = $query->orderBy('date', 'desc')
+                              ->orderBy('real_time', 'desc')
+                              ->get();
+        
+        // Add prefix based on gender
+        foreach ($appointments as $appointment) {
+            $gender = strtolower(optional($appointment->doctor->doctorDetails)->gender);
+            $name = optional($appointment->doctor)->name;
+            
+            if ($gender === 'female') {
+                $appointment->doctor->title_name = 'Dra. ' . $name;
+            } else {
+                $appointment->doctor->title_name = 'Dr. ' . $name;
+            }
+        }
+        // dd($appointments);
+        return $appointments;
+        
     }
 
     public function saveAppointment(Request $request)
@@ -115,7 +131,7 @@ class AppointmentController extends Controller
                 'date'      => $request->date,
                 'real_time' => $request->real_time,
                 'time'      => $time_data,
-                'status'    => 0, // Not yet approved
+                'status'    => 1, // Not yet approved
             ]);
 
             $user = User::where('id', $request->patient_id)->first();
@@ -123,7 +139,7 @@ class AppointmentController extends Controller
             if (!$user) {
                 Alert::error('', 'Unable to send confirmation email. Patient not found.');
             } else {
-                Mail::to($user->email)->send(new AppointmentConfirmationMail($appointment, $user));
+                Mail::to($user->email)->send(new AppointmentApprovalMail($appointment, $user));
             }
 
             // Log activity

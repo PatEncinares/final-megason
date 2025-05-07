@@ -50,8 +50,8 @@
                                     </td>
                                     <td>{{ 'PT' . str_pad($patient->id, 6, '0', STR_PAD_LEFT) }}</td>
                                     <td>{{ $patient['user']['name'] }}</td>
-                                    <td>{{ $patient['gender'] }}</td>
-                                    <td>{{ $patient['civil_status'] }}</td>
+                                    <td>{{ ucfirst(strtolower($patient['gender'])) }}</td>
+                                    <td>{{ ucfirst(strtolower($patient['civil_status'])) }}</td>
                                     <td>{{ $patient['age'] }}</td>
                                     <td>{{ $patient['mobile_number'] }}</td>
                                     <td>{{ $patient['address'] }}</td>

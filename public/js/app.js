@@ -63966,13 +63966,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -64031,6 +64024,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this = this;
 
       this.$http.get('/get-appointments').then(function (response) {
+        console.log(response.data);
         _this.appointments = response.data;
       }).catch(function (error) {
         console.error('Error fetching appointments:', error);
@@ -64101,6 +64095,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       __WEBPACK_IMPORTED_MODULE_0_sweetalert2___default.a.fire({
         title: 'Appointment Details',
         html: '\n          <p><strong>Patient:</strong> ' + app.patient.name + '</p>\n          <p><strong>Doctor:</strong> ' + app.doctor.name + '</p>\n          <p><strong>Date:</strong> ' + app.date + '</p>\n          <p><strong>Time:</strong> ' + app.real_time + '</p>\n          <p><strong>Status:</strong> ' + (app.status == 1 ? 'Approved' : app.status == 2 ? 'Canceled' : 'Pending') + '</p>\n        '
+      });
+    },
+    confirmCancel: function confirmCancel(appointmentId) {
+      __WEBPACK_IMPORTED_MODULE_0_sweetalert2___default.a.fire({
+        title: 'Are you sure?',
+        text: "This will cancel the appointment.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, cancel it!'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          window.location.href = '/appointments/cancel/' + appointmentId;
+        }
       });
     }
   }
@@ -68475,88 +68484,45 @@ var render = function() {
                         "tbody",
                         _vm._l(_vm.appointments, function(appointment, index) {
                           return _c("tr", { key: index }, [
-                            appointment.status == 0
-                              ? _c("td", [
-                                  _vm.user_data.type == 3
-                                    ? _c("span", [
-                                        _c(
-                                          "a",
-                                          {
-                                            attrs: {
-                                              href:
-                                                "/appointments/cancel/" +
-                                                appointment.id
-                                            }
-                                          },
-                                          [_vm._m(3, true)]
-                                        )
-                                      ])
-                                    : _vm.user_data.type == 4 ||
-                                      _vm.user_data.type == 1
-                                    ? _c("span", [
-                                        _c(
-                                          "a",
-                                          {
-                                            attrs: {
-                                              href:
-                                                "/appointments/approve/" +
-                                                appointment.id
-                                            }
-                                          },
-                                          [_vm._m(4, true)]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "a",
-                                          {
-                                            attrs: {
-                                              href:
-                                                "/appointments/cancel/" +
-                                                appointment.id
-                                            }
-                                          },
-                                          [_vm._m(5, true)]
-                                        )
-                                      ])
-                                    : _vm._e()
-                                ])
-                              : _c("td", [
-                                  appointment.status == 1
-                                    ? _c(
-                                        "button",
-                                        {
-                                          staticClass: "btn btn-info",
-                                          attrs: { disabled: "" }
-                                        },
-                                        [
-                                          _c("i", {
-                                            staticClass: "fa fa-check"
-                                          }),
-                                          _vm._v(" Approved")
-                                        ]
-                                      )
-                                    : appointment.status == 2
-                                    ? _c(
-                                        "button",
-                                        {
-                                          staticClass: "btn btn-danger",
-                                          attrs: { disabled: "" }
-                                        },
-                                        [
-                                          _c("i", {
-                                            staticClass: "fa fa-times"
-                                          }),
-                                          _vm._v(" Canceled")
-                                        ]
-                                      )
-                                    : _vm._e()
-                                ]),
+                            _c("td", [
+                              appointment.status !== 2
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-danger",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.confirmCancel(
+                                            appointment.id
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("i", { staticClass: "fa fa-times" }),
+                                      _vm._v(" Cancel\n              ")
+                                    ]
+                                  )
+                                : _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-danger",
+                                      attrs: { disabled: "" }
+                                    },
+                                    [
+                                      _c("i", { staticClass: "fa fa-times" }),
+                                      _vm._v(" Canceled\n              ")
+                                    ]
+                                  )
+                            ]),
                             _vm._v(" "),
                             _c("td", [
                               _vm._v(_vm._s(appointment.patient.name))
                             ]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(appointment.doctor.name))]),
+                            _c("td", [
+                              _vm._v(_vm._s(appointment.doctor.title_name))
+                            ]),
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(appointment.date))]),
                             _vm._v(" "),
@@ -68648,33 +68614,6 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Status")])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "btn btn-danger" }, [
-      _c("i", { staticClass: "fa fa-times" }),
-      _vm._v(" Cancel")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "btn btn-info" }, [
-      _c("i", { staticClass: "fa fa-check" }),
-      _vm._v(" Approve")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "btn btn-danger" }, [
-      _c("i", { staticClass: "fa fa-times" }),
-      _vm._v(" Cancel")
     ])
   }
 ]

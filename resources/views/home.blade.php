@@ -29,7 +29,7 @@
                     <div class="col-md-3 mb-4">
                         <a href="{{ route('appointment') }}" class="text-decoration-none">
                             <div class="card bg-success text-white shadow hover-lift">
-                                <div class="card-body">Today</div>
+                                <div class="card-body">Today's Appointments</div>
                                 <div class="card-footer h3" id="stat-today">...</div>
                             </div>
                         </a>
@@ -40,7 +40,7 @@
                     <div class="col-md-3 mb-4">
                         <a href="{{ route('appointment') }}" class="text-decoration-none">
                             <div class="card bg-info text-white shadow hover-lift">
-                                <div class="card-body">New</div>
+                                <div class="card-body">New Appointments</div>
                                 <div class="card-footer h3" id="stat-new">...</div>
                             </div>
                         </a>
@@ -51,7 +51,7 @@
                     <div class="col-md-3 mb-4">
                         <a href="{{ route('appointment') }}" class="text-decoration-none">
                             <div class="card bg-danger text-white shadow hover-lift">
-                                <div class="card-body">Cancelled</div>
+                                <div class="card-body">Cancelled Appointments</div>
                                 <div class="card-footer h3" id="stat-cancelled">...</div>
                             </div>
                         </a>
@@ -173,7 +173,53 @@
             </div>
         </div>
      @endif
-        {{-- System Logs --}}
+
+
+    @if(Auth::user()->type == 3)
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow hover-lift">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>Your Upcoming Appointments</span>
+                    <a href="{{ route('appointment') }}" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped mb-0">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Doctor</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patient-appointments">
+                            <tr><td colspan="3" class="text-center">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if(Auth::user()->type == 3 && isset($data['user'][0])) {{-- Just in case --}}
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card shadow hover-lift">
+                <div class="card-header">Your Latest Medical History</div>
+                <div class="card-body" id="medical-history-section">
+                    <p><strong>Complaints:</strong> <span id="mh-complains">Loading...</span></p>
+                    <p><strong>Diagnosis:</strong> <span id="mh-diagnosis">Loading...</span></p>
+                    <p><strong>Treatment:</strong> <span id="mh-treatment">Loading...</span></p>
+                    <p><strong>Last Visit:</strong> <span id="mh-last-visit">Loading...</span></p>
+                    <p><strong>Next Visit:</strong> <span id="mh-next-visit">Loading...</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    
        
 </main>
 
@@ -184,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch('/home_dashboard')
         .then(res => res.json())
         .then(data => {
-            // Safely set innerText only if element exists
+            // Update stats safely
             const setStat = (id, value) => {
                 const el = document.getElementById(id);
                 if (el) el.innerText = value;
@@ -234,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Sales Bar Chart
             const salesChart = document.getElementById("salesChart");
-            if (salesChart) {
+            if (salesChart && data.sales) {
                 new Chart(salesChart, {
                     type: 'bar',
                     data: {
@@ -253,11 +299,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
 
-            // Upcoming Appointments Table
+            // Admin/Doctor Upcoming Appointments
             const upcomingBody = document.getElementById('upcoming-appointments');
-            if (upcomingBody) {
+            if (upcomingBody && data.upcoming_appointments) {
                 upcomingBody.innerHTML = '';
-                if (data.upcoming_appointments && data.upcoming_appointments.length) {
+                if (data.upcoming_appointments.length) {
                     data.upcoming_appointments.forEach(app => {
                         upcomingBody.innerHTML += `
                             <tr>
@@ -273,11 +319,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
 
+            // Patient Upcoming Appointments
+            const patientAppointments = document.getElementById('patient-appointments');
+            if (patientAppointments && data.patient_appointments) {
+                patientAppointments.innerHTML = '';
+                if (data.patient_appointments.length) {
+                    data.patient_appointments.forEach(app => {
+                        patientAppointments.innerHTML += `
+                            <tr>
+                                <td>${app.doctor}</td>
+                                <td>${app.date}</td>
+                                <td>${app.time}</td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    patientAppointments.innerHTML = `<tr><td colspan="3" class="text-center">No upcoming appointments.</td></tr>`;
+                }
+            }
+
             // System Logs
             const logsList = document.getElementById('system-logs');
-            if (logsList) {
+            if (logsList && data.system_logs) {
                 logsList.innerHTML = '';
-                if (data.system_logs && data.system_logs.length) {
+                if (data.system_logs.length) {
                     data.system_logs.forEach(log => {
                         logsList.innerHTML += `
                             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -290,24 +355,42 @@ document.addEventListener("DOMContentLoaded", function () {
                     logsList.innerHTML = `<li class="list-group-item text-center">No system logs available.</li>`;
                 }
             }
+
+            const mh = data.latest_medical_history;
+            if (mh) {
+                document.getElementById('mh-complains').textContent = mh.complains;
+                document.getElementById('mh-diagnosis').textContent = mh.diagnosis;
+                document.getElementById('mh-treatment').textContent = mh.treatment;
+                document.getElementById('mh-last-visit').textContent = mh.last_visit;
+                document.getElementById('mh-next-visit').textContent = mh.next_visit;
+            }
+            else {
+                document.getElementById('medical-history-section').innerHTML = `
+                    <p class="text-muted">No medical history found.</p>
+                `;
+            }
+
         })
         .catch(err => {
             console.error('Dashboard fetch error:', err);
         });
+
+      
+    // Live Clock Update
+    function updateLiveTime() {
+        const now = new Date();
+        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        const date = now.toLocaleDateString(undefined, options);
+        const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const el = document.getElementById('live-datetime');
+        if (el) el.textContent = `${date} ${time}`;
+    }
+
+    setInterval(updateLiveTime, 1000);
+    updateLiveTime(); // initial call
 });
-
-function updateLiveTime() {
-    const now = new Date();
-    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-    const date = now.toLocaleDateString(undefined, options);
-    const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    const el = document.getElementById('live-datetime');
-    if (el) el.textContent = `${date} ${time}`;
-}
-
-setInterval(updateLiveTime, 1000);
-updateLiveTime(); // run once immediately
 </script>
+
 
 
 {{-- Hover Animation Style --}}

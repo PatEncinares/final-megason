@@ -242,6 +242,10 @@ class HomeController extends Controller
         $appointmentsQuery->where('doctor_id', $user->id);
     }
 
+    if ($user->type == 3) {
+        $appointmentsQuery->where('user_id', $user->id);
+    }
+
     // Breakdown
     $breakdown = Appointment::select('specializations.name as label', DB::raw('COUNT(appointments.id) as value'))
         ->join('users', 'appointments.doctor_id', '=', 'users.id')
@@ -280,6 +284,36 @@ class HomeController extends Controller
                 'doctor' => optional($a->doctor)->name ?? 'N/A',
             ];
         });
+
+    // Patient-specific appointments (if logged-in user is a patient)
+    $patientAppointments = [];
+    if ($user->type == 3) {
+        $patientAppointments = Appointment::with('doctor')
+        ->where('user_id', $user->id) // ✅ filtered correctly by user_id
+        ->whereDate('date', '>=', $today)
+        ->orderBy('date')
+        ->take(5)
+        ->get()
+        ->map(function ($a) {
+            return [
+                'doctor' => optional($a->doctor)->name ?? 'N/A',
+                'date' => Carbon::parse($a->date)->format('M d, Y'),
+                'time' => $a->real_time ?? 'N/A',
+            ];
+        });
+    
+    }
+
+    $latestMedicalHistory = null;
+    // dd($user);
+    if ($user->type == 3) {
+        $latestMedicalHistory = DB::table('medical_history')
+        ->where('patient_id', $user->id)
+        ->orderByDesc('created_at')
+        ->first();
+    }
+
+    // dd($latestMedicalHistory);
 
     // System Logs (only for admin)
     $systemLogs = [];
@@ -337,9 +371,13 @@ class HomeController extends Controller
         ] : [],
         'recent_patients' => [],
         'upcoming_appointments' => $upcomingAppointments,
+        'patient_appointments' => $patientAppointments,
+        'latest_medical_history' => $latestMedicalHistory,
         'system_logs' => $systemLogs,
+        
     ]);
 }
+
 
 
 }

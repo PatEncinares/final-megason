@@ -137,6 +137,7 @@ class UsersController extends Controller
     } 
 
     public function edit(Request $request){
+        
         $user = User::where('id', Auth::user()->id)->with('usertype','usertype.permissions')->get();
         $permissions = [];
         foreach($user[0]->usertype->permissions as $permission)
@@ -217,19 +218,19 @@ class UsersController extends Controller
                 $patientDetail[0]->delete();
             }
         }
-        $tempPass = str_shuffle($this->rand_str());
+        // $tempPass = str_shuffle($this->rand_str());
 
         $user[0]->name = $request->name;
         $user[0]->email = $request->email;
         $user[0]->contact_number = $request->contact_number;
         $user[0]->type = $request->user_type;
-        $user[0]->password = Hash::make($tempPass);
+        // $user[0]->password = Hash::make($tempPass);
         $user[0]->save();
 
         //mail credentials
         $data = [
             'user'      => $user[0],
-            'tempPass'  => $tempPass
+            // 'tempPass'  => $tempPass
         ];
         // Mail::to($user[0]->email)->send(new \App\Mail\UserCreated($data));
 

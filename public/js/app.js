@@ -63812,7 +63812,7 @@ var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-2ec9e84e"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -63855,13 +63855,13 @@ var content = __webpack_require__(246);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("5eae3fa8", content, false, {});
+var update = __webpack_require__(3)("2a5bcfad", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2ec9e84e\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Schedule.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2ec9e84e\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Schedule.vue");
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2ec9e84e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Schedule.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2ec9e84e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Schedule.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -63879,7 +63879,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.pending {\r\n  color: orange;\r\n  font-weight: bold;\n}\n.approved {\r\n  color: green;\r\n  font-weight: bold;\n}\n.canceled {\r\n  color: red;\r\n  font-weight: bold;\n}\n.modal-body {\r\n  max-height: 400px;\r\n  overflow-y: auto;\n}\r\n", ""]);
+exports.push([module.i, "\n.custom-modal-overlay[data-v-2ec9e84e] {\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  background: rgba(0, 0, 0, 0.5);\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -webkit-box-align: center;\r\n      -ms-flex-align: center;\r\n          align-items: center;\r\n  -webkit-box-pack: center;\r\n      -ms-flex-pack: center;\r\n          justify-content: center;\r\n  z-index: 1050;\n}\n.custom-modal-content[data-v-2ec9e84e] {\r\n  background: white;\r\n  border-radius: 12px;\r\n  padding: 30px;\r\n  max-width: 950px;\r\n  width: 95%;\r\n  max-height: 90vh;\r\n  /* 💡 LIMIT HEIGHT */\r\n  overflow-y: auto;\r\n  /* 💡 ENABLE SCROLL */\r\n  -webkit-box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);\r\n          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);\n}\n.modal-header[data-v-2ec9e84e] {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -webkit-box-pack: justify;\r\n      -ms-flex-pack: justify;\r\n          justify-content: space-between;\r\n  -webkit-box-align: center;\r\n      -ms-flex-align: center;\r\n          align-items: center;\n}\n.close[data-v-2ec9e84e] {\r\n  background: none;\r\n  border: none;\r\n  font-size: 28px;\r\n  line-height: 1;\r\n  cursor: pointer;\n}\n.fade-scale-enter-active[data-v-2ec9e84e] {\r\n  -webkit-animation: fadeInScale-data-v-2ec9e84e 0.3s ease-out forwards;\r\n          animation: fadeInScale-data-v-2ec9e84e 0.3s ease-out forwards;\n}\n.fade-scale-leave-active[data-v-2ec9e84e] {\r\n  -webkit-animation: fadeOutScale-data-v-2ec9e84e 0.2s ease-in forwards;\r\n          animation: fadeOutScale-data-v-2ec9e84e 0.2s ease-in forwards;\n}\n@-webkit-keyframes fadeInScale-data-v-2ec9e84e {\n0% {\r\n    opacity: 0;\r\n    -webkit-transform: scale(0.9);\r\n            transform: scale(0.9);\n}\n100% {\r\n    opacity: 1;\r\n    -webkit-transform: scale(1);\r\n            transform: scale(1);\n}\n}\n@keyframes fadeInScale-data-v-2ec9e84e {\n0% {\r\n    opacity: 0;\r\n    -webkit-transform: scale(0.9);\r\n            transform: scale(0.9);\n}\n100% {\r\n    opacity: 1;\r\n    -webkit-transform: scale(1);\r\n            transform: scale(1);\n}\n}\n@-webkit-keyframes fadeOutScale-data-v-2ec9e84e {\n0% {\r\n    opacity: 1;\r\n    -webkit-transform: scale(1);\r\n            transform: scale(1);\n}\n100% {\r\n    opacity: 0;\r\n    -webkit-transform: scale(0.9);\r\n            transform: scale(0.9);\n}\n}\n@keyframes fadeOutScale-data-v-2ec9e84e {\n0% {\r\n    opacity: 1;\r\n    -webkit-transform: scale(1);\r\n            transform: scale(1);\n}\n100% {\r\n    opacity: 0;\r\n    -webkit-transform: scale(0.9);\r\n            transform: scale(0.9);\n}\n}\r\n", ""]);
 
 // exports
 
@@ -63897,6 +63897,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__fullcalendar_vue__ = __webpack_require__(248);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__fullcalendar_daygrid__ = __webpack_require__(250);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__fullcalendar_interaction__ = __webpack_require__(251);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -63982,9 +64020,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user_data'],
-  components: {
-    FullCalendar: __WEBPACK_IMPORTED_MODULE_2__fullcalendar_vue__["a" /* default */]
-  },
   data: function data() {
     return {
       appointments: [],
@@ -63992,132 +64027,113 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       patients_list: {},
       doctors_list: [],
       newScheduleParams: {},
-      selectedDate: '',
-      selectedAppointments: [],
-      calendarOptions: {
-        plugins: [__WEBPACK_IMPORTED_MODULE_3__fullcalendar_daygrid__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__fullcalendar_interaction__["a" /* default */]],
-        initialView: 'dayGridMonth',
-        events: [],
-        dateClick: null,
-        eventClick: null
-      }
+      modalDate: '',
+      modalAppointments: [],
+      showModal: false,
+      calendarPlugins: [__WEBPACK_IMPORTED_MODULE_3__fullcalendar_daygrid__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__fullcalendar_interaction__["a" /* default */]]
     };
+  },
+
+  components: {
+    FullCalendar: __WEBPACK_IMPORTED_MODULE_2__fullcalendar_vue__["a" /* default */]
   },
   mounted: function mounted() {
     this.getAppointments();
     this.getPatientsList();
     this.getDoctorsList();
-    this.calendarOptions.events = this.getCalendarEvents;
-    this.calendarOptions.dateClick = this.onDateClick;
-    this.calendarOptions.eventClick = this.onEventClick;
   },
 
-  computed: {
-    // calendarOptions() {
-    //   return {
-    //     plugins: [dayGridPlugin, interactionPlugin],
-    //     initialView: 'dayGridMonth',
-    //     events: this.getCalendarEvents,
-    //     dateClick: this.onDateClick,
-    //     eventClick: this.onEventClick
-    //   };
-    // }
-  },
   methods: {
-    toggleView: function toggleView() {
-      this.calendar_view = !this.calendar_view;
-    },
     getAppointments: function getAppointments() {
       var _this = this;
 
-      this.$http.get('/get-appointments').then(function (response) {
-        console.log(response.data);
-        _this.appointments = response.data;
-      }).catch(function (error) {
-        console.error('Error fetching appointments:', error);
+      this.$http.get('/get-appointments').then(function (res) {
+        _this.appointments = res.data;
+      }).catch(function (err) {
+        return console.log(err);
       });
     },
     getPatientsList: function getPatientsList() {
       var _this2 = this;
 
-      this.$http.get('/getPatientList').then(function (response) {
+      this.$http.get('/getPatientList').then(function (res) {
         var temp = {};
-        response.data.forEach(function (item) {
-          temp[item.user_id] = item.user.name;
+        res.data.forEach(function (p) {
+          temp[p.user_id] = p.user.name;
         });
         _this2.patients_list = temp;
-      }).catch(function (error) {
-        return console.error(error);
       });
     },
     getDoctorsList: function getDoctorsList() {
       var _this3 = this;
 
-      this.$http.get('/getDoctorsList').then(function (response) {
+      this.$http.get('/getDoctorsList').then(function (res) {
         var temp = {};
-        response.data.forEach(function (item) {
-          temp[item.user_id] = item.fullname;
+        res.data.forEach(function (d) {
+          temp[d.user_id] = d.fullname;
         });
         _this3.doctors_list = temp;
-      }).catch(function (error) {
-        return console.error(error);
       });
     },
-    getCalendarEvents: function getCalendarEvents(fetchInfo, successCallback, failureCallback) {
-      var events = this.appointments.map(function (app) {
-        return {
-          title: app.patient.name + ' (' + app.time + ')',
-          date: app.date,
-          extendedProps: app
-        };
-      });
-      successCallback(events);
+    toggleView: function toggleView() {
+      this.calendar_view = !this.calendar_view;
     },
-    onDateClick: function onDateClick(info) {
-      var dateStr = info.dateStr;
-      this.selectedDate = dateStr;
-      this.selectedAppointments = this.appointments.filter(function (app) {
-        return app.date === dateStr;
-      });
+    handleDateClick: function handleDateClick(info) {
+      var _this4 = this;
 
-      if (this.selectedAppointments.length) {
-        var list = this.selectedAppointments.map(function (a) {
-          return '<li><strong>' + a.real_time + '</strong> - ' + a.patient.name + ' with Dr. ' + a.doctor.name + '</li>';
-        }).join('');
-        __WEBPACK_IMPORTED_MODULE_0_sweetalert2___default.a.fire({
-          title: 'Appointments on ' + dateStr,
-          html: '<ul style="text-align:left">' + list + '</ul>',
-          width: 600
+      var selectedDate = info.dateStr;
+      var userType = this.user_data.type;
+
+      var filtered = this.appointments.filter(function (a) {
+        return a.date === selectedDate;
+      });
+      if (userType === 2) {
+        filtered = filtered.filter(function (a) {
+          return a.doctor && a.doctor.user_id == _this4.user_data.id;
         });
-      } else {
-        __WEBPACK_IMPORTED_MODULE_0_sweetalert2___default.a.fire({
-          icon: 'info',
-          title: 'No Appointments',
-          text: 'There are no appointments scheduled on ' + dateStr + '.'
+      } else if (userType === 3) {
+        filtered = filtered.filter(function (a) {
+          return a.patient && a.patient.user_id == _this4.user_data.id;
         });
       }
+
+      this.modalDate = selectedDate;
+      this.modalAppointments = filtered;
+      this.showModal = true;
     },
-    onEventClick: function onEventClick(info) {
-      var app = info.event.extendedProps;
-      __WEBPACK_IMPORTED_MODULE_0_sweetalert2___default.a.fire({
-        title: 'Appointment Details',
-        html: '\n          <p><strong>Patient:</strong> ' + app.patient.name + '</p>\n          <p><strong>Doctor:</strong> ' + app.doctor.name + '</p>\n          <p><strong>Date:</strong> ' + app.date + '</p>\n          <p><strong>Time:</strong> ' + app.real_time + '</p>\n          <p><strong>Status:</strong> ' + (app.status == 1 ? 'Approved' : app.status == 2 ? 'Canceled' : 'Pending') + '</p>\n        '
+    formatTime: function formatTime(time) {
+      return __WEBPACK_IMPORTED_MODULE_1_moment___default()(time, 'HH:mm:ss').format('hh:mm A');
+    }
+  },
+  computed: {
+    calendarEvents: function calendarEvents() {
+      var userType = this.user_data.type;
+      var userId = this.user_data.id;
+      var dates = this.appointments.filter(function (a) {
+        if (userType === 2) return a.doctor && a.doctor.user_id == userId;
+        if (userType === 3) return a.patient && a.patient.user_id == userId;
+        return true;
+      }).map(function (a) {
+        return a.date;
+      });
+
+      return [].concat(_toConsumableArray(new Set(dates))).map(function (date) {
+        return {
+          title: 'View Schedules',
+          date: date,
+          allDay: true,
+          className: 'view-schedule-event'
+        };
       });
     },
-    confirmCancel: function confirmCancel(appointmentId) {
-      __WEBPACK_IMPORTED_MODULE_0_sweetalert2___default.a.fire({
-        title: 'Are you sure?',
-        text: "This will cancel the appointment.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, cancel it!'
-      }).then(function (result) {
-        if (result.isConfirmed) {
-          window.location.href = '/appointments/cancel/' + appointmentId;
-        }
+    groupedAppointments: function groupedAppointments() {
+      var grouped = {};
+      this.modalAppointments.forEach(function (a) {
+        var doctor = a.doctor ? a.doctor.title_name : 'Inactive Doctor';
+        if (!grouped[doctor]) grouped[doctor] = [];
+        grouped[doctor].push(a);
       });
+      return grouped;
     }
   }
 });
@@ -68542,7 +68558,11 @@ var render = function() {
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(appointment.date))]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(appointment.real_time))]),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(_vm.formatTime(appointment.real_time))
+                              )
+                            ]),
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(appointment.time))]),
                             _vm._v(" "),
@@ -68577,10 +68597,133 @@ var render = function() {
                 ]
               )
             ])
-          : _vm._e(),
+          : _c("full-calendar", {
+              attrs: {
+                "default-view": "dayGridMonth",
+                plugins: _vm.calendarPlugins,
+                events: _vm.calendarEvents
+              },
+              on: { dateClick: _vm.handleDateClick }
+            }),
         _vm._v(" "),
-        _vm.calendar_view
-          ? _c("FullCalendar", { attrs: { options: _vm.calendarOptions } })
+        _vm.showModal
+          ? _c(
+              "div",
+              { staticClass: "custom-modal-overlay" },
+              [
+                _c("transition", { attrs: { name: "fade-scale" } }, [
+                  _c("div", { staticClass: "custom-modal-content" }, [
+                    _c("div", { staticClass: "modal-header" }, [
+                      _c("h5", [
+                        _vm._v("Schedules for " + _vm._s(_vm.modalDate))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "close",
+                          on: {
+                            click: function($event) {
+                              _vm.showModal = false
+                            }
+                          }
+                        },
+                        [_vm._v("×")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-body" }, [
+                      !_vm.modalAppointments.length
+                        ? _c("div", [_vm._v("No appointments found.")])
+                        : _c(
+                            "div",
+                            _vm._l(_vm.groupedAppointments, function(
+                              appointments,
+                              doctorName
+                            ) {
+                              return _c(
+                                "div",
+                                { key: doctorName, staticClass: "mb-4" },
+                                [
+                                  _c(
+                                    "h5",
+                                    {
+                                      staticClass:
+                                        "text-primary border-bottom pb-1 mb-2"
+                                    },
+                                    [_vm._v("Doctor: " + _vm._s(doctorName))]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "table",
+                                    { staticClass: "table table-bordered" },
+                                    [
+                                      _c("thead", [
+                                        _c("tr", [
+                                          _c("th", [_vm._v("Patient")]),
+                                          _vm._v(" "),
+                                          _c("th", [_vm._v("Time")]),
+                                          _vm._v(" "),
+                                          _c("th", [_vm._v("Period")]),
+                                          _vm._v(" "),
+                                          _c("th", [_vm._v("Status")])
+                                        ])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "tbody",
+                                        _vm._l(appointments, function(a, i) {
+                                          return _c("tr", { key: i }, [
+                                            _c("td", [
+                                              _vm._v(
+                                                _vm._s(
+                                                  a.patient
+                                                    ? a.patient.name
+                                                    : "Unknown"
+                                                )
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("td", [
+                                              _vm._v(
+                                                _vm._s(
+                                                  _vm.formatTime(a.real_time)
+                                                )
+                                              )
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("td", [_vm._v(_vm._s(a.time))]),
+                                            _vm._v(" "),
+                                            _c("td", [
+                                              _vm._v(
+                                                "\n                        " +
+                                                  _vm._s(
+                                                    a.status === 0
+                                                      ? "Pending"
+                                                      : a.status === 1
+                                                      ? "Approved"
+                                                      : "Canceled"
+                                                  ) +
+                                                  "\n                      "
+                                              )
+                                            ])
+                                          ])
+                                        }),
+                                        0
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                    ])
+                  ])
+                ])
+              ],
+              1
+            )
           : _vm._e()
       ],
       1

@@ -67,11 +67,13 @@
                 <br>
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
+                        <h6 style="color:#3D6B07!important"><strong>Name</strong></h6>
                         <h6><strong>{{ $data['patientDetail']['emergency_name'] }}</strong></h6>
                         <h6 style="color:#3D6B07!important"><strong>Home Phone</strong></h6>
                         <h6><strong>{{ $data['patientDetail']['emergency_number'] }}</strong></h6>
                     </div>
                     <div class="col-lg-6 col-md-6">
+                        <h6 style="color:#3D6B07!important"><strong>Address</strong></h6>
                         <h6><strong>{{ $data['patientDetail']['emergency_address'] }}</strong></h6>
                     </div>
                 </div>
@@ -91,7 +93,7 @@
                                 <strong>Complains :</strong> {{ $history['complains'] }} <br>
                                 <strong>Diagnosis :</strong> {{ $history['diagnosis'] }} <br>
                                 <strong>Treatment :</strong> {{ $history['treatment'] }} <br>
-                                <strong>Date of last visit :</strong> {{ $history['last_visit'] }} <br>
+                                <strong>Date of last visit :</strong> {{ \Carbon\Carbon::parse($history['last_visit'])->format('F d, Y') }} <br>
                                 <strong>Next Visit :</strong> {{ \Carbon\Carbon::parse($history['next_visit'])->format('F d, Y') }} <br>
                                 <strong>Attending Doctor :</strong> {{ optional($history->doctor)->name ?? 'Doctor is no longer active' }} <br> <br>
 

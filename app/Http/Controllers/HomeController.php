@@ -9,9 +9,11 @@ use App\ActivityLog;
 use App\Appointment;
 use App\Transaction;
 use Twilio\Rest\Client;
+use App\Mail\SendOtpMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
@@ -86,16 +88,27 @@ class HomeController extends Controller
         }
     }
 
+    private function sendMessage($message, $recipient)
+    {
+        try {
+            Mail::to($recipient)->send(new SendOtpMail($message));
+            \Log::info('OTP Email sent to: ' . $recipient);
+        } catch (\Exception $e) {
+            \Log::error('Email Error: ' . $e->getMessage());
+        }
+    }
+
     public function requestNewOtp()
     {
         $otp = random_int(100000, 999999);
-        $user = User::where('id', Auth::user()->id)->get();
-        $user[0]->otp = $otp;
-        $user[0]->save();
+        $user = User::find(Auth::id());
+        $user->otp = $otp;
+        $user->save();
 
-        $this->sendMessage('Your Megason Diagnostic Clinics account was logged in. To proceed, ' . $user[0]->otp . ' is your OTP.', $user[0]->contact_number);
-        Alert::success('', 'New OTP has been sent to your mobile number');
-        return redirect('home');
+        $this->sendMessage('Your Megason Diagnostic Clinics account was logged in. To proceed, your OTP is: ' . $otp, $user->email);
+
+        Alert::success('', 'A new OTP has been sent to your email address.');
+        return redirect()->back();
     }
 
     public function validateOTP(Request $request)

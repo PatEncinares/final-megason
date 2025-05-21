@@ -8,7 +8,7 @@ class MedicalHistory extends Model
 {
     protected $table = 'medical_history';
     
-    protected $fillable = ['patient_id','complains','diagnosis','treatment','last_visit','next_visit','attending_doctor'];
+    protected $fillable = ['patient_id','complains','diagnosis','treatment','last_visit','next_visit','attending_doctor', 'time'];
 
     public function patient(){
         return $this->belongsTo('App\User', 'patient_id');

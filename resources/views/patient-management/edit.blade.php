@@ -1,212 +1,259 @@
 @extends('layouts.dashboard.main')
 
 @section('content')
-<main>
-    <div class="container-fluid" id="app">
-        <h1 class="mt-4"><img class="card-img-top img-thumbnail" style="height: 60px; width : 60px" src="{{ asset('assets/quick_links/patient.png') }}" alt="Patient Management">Patient Management</h1>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Edit Patient</li>
-        </ol>
+    <main>
+        <div class="container-fluid" id="app">
+            <h1 class="mt-4"><img class="card-img-top img-thumbnail" style="height: 60px; width : 60px"
+                    src="{{ asset('assets/quick_links/patient.png') }}" alt="Patient Management">Patient Management</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">Edit Patient</li>
+            </ol>
 
-        <form method="POST" action="{{ route('update-patient') }}" aria-label="{{ __('Edit Patient') }}">
-            @csrf
-            <a href="{{ url()->previous() }}" class="btn btn-secondary d-print-none mb-2">
-                <i class="fa fa-arrow-left"></i> Back
-            </a>
-            <h3>Personal Information</h3>
-            <input type="hidden" name="id" value="{{ $data['patientDetail']['id'] }}">
-            <input type="hidden" name="user_id" value="{{ $data['patientAccount']['id'] }}">
+            <form method="POST" action="{{ route('update-patient') }}" aria-label="{{ __('Edit Patient') }}">
+                @csrf
+                <a href="{{ url()->previous() }}" class="btn btn-secondary d-print-none mb-2">
+                    <i class="fa fa-arrow-left"></i> Back
+                </a>
+                <h3>Personal Information</h3>
+                <input type="hidden" name="id" value="{{ $data['patientDetail']['id'] }}">
+                <input type="hidden" name="user_id" value="{{ $data['patientAccount']['id'] }}">
 
-            <div class="form-group row">
-                <label for="fullname" class="col-md-4 col-form-label text-md-right">{{ __('Full Name') }}</label>
+                <div class="form-group row">
+                    <label for="fullname" class="col-md-4 col-form-label text-md-right">{{ __('Full Name') }}</label>
 
-                <div class="col-md-6">
-                    <input id="fullname" type="text" class="form-control{{ $errors->has('fullname') ? ' is-invalid' : '' }}" name="fullname" value="{{ $data['patientAccount']['name'] }}" required autofocus>
+                    <div class="col-md-6">
+                        <input id="fullname" type="text"
+                            class="form-control{{ $errors->has('fullname') ? ' is-invalid' : '' }}" name="fullname"
+                            value="{{ $data['patientAccount']['name'] }}" required autofocus>
 
-                    @if ($errors->has('fullname'))
+                        @if ($errors->has('fullname'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('fullname') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="mobile" class="col-md-4 col-form-label text-md-right">{{ __('Mobile Number') }}</label>
+
+                    <div class="col-md-6">
+                        <input id="mobile" type="text"
+                            class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" name="mobile"
+                            value="{{ $data['patientDetail']['mobile_number'] }}" required autofocus>
+
+                        @if ($errors->has('mobile'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('mobile') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="dob" class="col-md-4 col-form-label text-md-right">{{ __('Date of Birth') }}</label>
+
+                    <div class="col-md-6">
+                        <input id="dob" name="dob"
+                            class="form-control{{ $errors->has('dob') ? ' is-invalid' : '' }}" type="date"
+                            value="{{ date('Y-m-d', strtotime($data['patientDetail']['date_of_birth'])) }}">
+                    </div>
+
+                    @if ($errors->has('dob'))
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('fullname') }}</strong>
+                            <strong>{{ $errors->first('dob') }}</strong>
                         </span>
                     @endif
-                </div>
-            </div>
 
-            <div class="form-group row">
-                <label for="mobile" class="col-md-4 col-form-label text-md-right">{{ __('Mobile Number') }}</label>
-
-                <div class="col-md-6">
-                    <input id="mobile" type="text" class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" name="mobile" value="{{ $data['patientDetail']['mobile_number'] }}" required autofocus>
-
-                    @if ($errors->has('mobile'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('mobile') }}</strong>
-                        </span>
-                    @endif
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="dob" class="col-md-4 col-form-label text-md-right">{{ __('Date of Birth') }}</label>
-
-                <div class="col-md-6">
-                  <input id="dob" name="dob" class="form-control{{ $errors->has('dob') ? ' is-invalid' : '' }}" type="date" value="{{ date('Y-m-d',strtotime($data['patientDetail']['date_of_birth'])) }}">
                 </div>
 
-                @if ($errors->has('dob'))
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $errors->first('dob') }}</strong>
-                    </span>
-                @endif
+                <div class="form-group row">
+                    <label for="gender" class="col-md-4 col-form-label text-md-right">{{ __('Gender') }}</label>
 
-            </div>
+                    <div class="col-md-6">
+                        <select name="gender" id="gender"
+                            class="form-control{{ $errors->has('gender') ? ' is-invalid' : '' }}" name="gender"
+                            value="{{ $data['patientDetail']['gender'] }}" required autofocus>
+                            <option value="" disabled>-- Select gender --</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
 
-            <div class="form-group row">
-                <label for="gender" class="col-md-4 col-form-label text-md-right">{{ __('Gender') }}</label>
-
-                <div class="col-md-6">
-                    <select name="gender" id="gender" class="form-control{{ $errors->has('gender') ? ' is-invalid' : '' }}" name="gender" value="{{ $data['patientDetail']['gender'] }}" required autofocus>
-                        <option value="" disabled>-- Select gender --</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-
-                    @if ($errors->has('gender'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('gender') }}</strong>
-                        </span>
-                    @endif
+                        @if ($errors->has('gender'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('gender') }}</strong>
+                            </span>
+                        @endif
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group row">
-                <label for="civil_status" class="col-md-4 col-form-label text-md-right">{{ __('Civil Status') }}</label>
+                <div class="form-group row">
+                    <label for="civil_status"
+                        class="col-md-4 col-form-label text-md-right">{{ __('Civil Status') }}</label>
 
-                <div class="col-md-6">
-                    <select name="civil_status" id="civil_status" class="form-control{{ $errors->has('civil_status') ? ' is-invalid' : '' }}" name="gender" value="{{ $data['patientDetail']['gender'] }}" required autofocus>
-                        <option value="" disabled>-- Select Civil Status --</option>
-                        <option value="single">Single</option>
-                        <option value="married">Married</option>
-                        <option value="widowed">Widowed</option>
-                        <option value="separated">Separated</option>
-                    </select>
+                    <div class="col-md-6">
+                        <select name="civil_status" id="civil_status"
+                            class="form-control{{ $errors->has('civil_status') ? ' is-invalid' : '' }}" name="gender"
+                            value="{{ $data['patientDetail']['gender'] }}" required autofocus>
+                            <option value="" disabled>-- Select Civil Status --</option>
+                            <option value="single">Single</option>
+                            <option value="married">Married</option>
+                            <option value="widowed">Widowed</option>
+                            <option value="separated">Separated</option>
+                        </select>
 
-                    @if ($errors->has('gender'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('gender') }}</strong>
-                        </span>
-                    @endif
+                        @if ($errors->has('gender'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('gender') }}</strong>
+                            </span>
+                        @endif
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group row">
-                <label for="age" class="col-md-4 col-form-label text-md-right">{{ __('Age') }}</label>
-
-                <div class="col-md-6">
-                    <input id="age" type="number" class="form-control{{ $errors->has('age') ? ' is-invalid' : '' }}" name="age" value="{{ $data['patientDetail']['age'] }}" required autofocus>
-
-                    @if ($errors->has('age'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('age') }}</strong>
-                        </span>
-                    @endif
+                <div class="form-group row">
+                    <label for="age" class="col-md-4 col-form-label text-md-right">{{ __('Age') }}</label>
+                    <div class="col-md-6">
+                        <input id="age" type="number" class="form-control" name="age"
+                            value="{{ \Carbon\Carbon::parse($data['patientDetail']['date_of_birth'])->age }}" readonly>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group row">
-                <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Address') }}</label>
 
-                <div class="col-md-6">
-                    <input id="address" type="text" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" value="{{ $data['patientDetail']['address'] }}" required autofocus>
+                <div class="form-group row">
+                    <label for="address" class="col-md-4 col-form-label text-md-right">{{ __('Address') }}</label>
 
-                    @if ($errors->has('address'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('address') }}</strong>
-                        </span>
-                    @endif
+                    <div class="col-md-6">
+                        <input id="address" type="text"
+                            class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address"
+                            value="{{ $data['patientDetail']['address'] }}" required autofocus>
+
+                        @if ($errors->has('address'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('address') }}</strong>
+                            </span>
+                        @endif
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group row">
-                <label for="weight" class="col-md-4 col-form-label text-md-right">{{ __('Weight (kg)') }}</label>
+                <div class="form-group row">
+                    <label for="weight" class="col-md-4 col-form-label text-md-right">{{ __('Weight (kg)') }}</label>
 
-                <div class="col-md-6">
-                    <input id="weight" type="number" class="form-control{{ $errors->has('weight') ? ' is-invalid' : '' }}" name="weight" value="{{ $data['patientDetail']['weight'] }}" required autofocus>
+                    <div class="col-md-6">
+                        <input id="weight" type="number"
+                            class="form-control{{ $errors->has('weight') ? ' is-invalid' : '' }}" name="weight"
+                            value="{{ $data['patientDetail']['weight'] }}" required autofocus>
 
-                    @if ($errors->has('weight'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('weight') }}</strong>
-                        </span>
-                    @endif
+                        @if ($errors->has('weight'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('weight') }}</strong>
+                            </span>
+                        @endif
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group row">
-                <label for="height" class="col-md-4 col-form-label text-md-right">{{ __('Height (cm)') }}</label>
+                <div class="form-group row">
+                    <label for="height" class="col-md-4 col-form-label text-md-right">{{ __('Height (cm)') }}</label>
 
-                <div class="col-md-6">
-                    <input id="height" type="number" class="form-control{{ $errors->has('height') ? ' is-invalid' : '' }}" name="height" value="{{ $data['patientDetail']['height'] }}" required autofocus>
+                    <div class="col-md-6">
+                        <input id="height" type="number"
+                            class="form-control{{ $errors->has('height') ? ' is-invalid' : '' }}" name="height"
+                            value="{{ $data['patientDetail']['height'] }}" required autofocus>
 
-                    @if ($errors->has('height'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('height') }}</strong>
-                        </span>
-                    @endif
+                        @if ($errors->has('height'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('height') }}</strong>
+                            </span>
+                        @endif
+                    </div>
                 </div>
-            </div>
 
-            <hr>
+                <hr>
 
-            <h3>Emergency Contact</h3>
+                <h3>Emergency Contact</h3>
 
-            <div class="form-group row">
-                <label for="emergency_name" class="col-md-4 col-form-label text-md-right">{{ __('Emergency Contact Name') }}</label>
+                <div class="form-group row">
+                    <label for="emergency_name"
+                        class="col-md-4 col-form-label text-md-right">{{ __('Emergency Contact Name') }}</label>
 
-                <div class="col-md-6">
-                    <input id="emergency_name" type="text" class="form-control{{ $errors->has('emergency_name') ? ' is-invalid' : '' }}" name="emergency_name" value="{{ $data['patientDetail']['emergency_name'] }}" required autofocus>
+                    <div class="col-md-6">
+                        <input id="emergency_name" type="text"
+                            class="form-control{{ $errors->has('emergency_name') ? ' is-invalid' : '' }}"
+                            name="emergency_name" value="{{ $data['patientDetail']['emergency_name'] }}" required
+                            autofocus>
 
-                    @if ($errors->has('emergency_name'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('emergency_name') }}</strong>
-                        </span>
-                    @endif
+                        @if ($errors->has('emergency_name'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('emergency_name') }}</strong>
+                            </span>
+                        @endif
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group row">
-                <label for="emergency_number" class="col-md-4 col-form-label text-md-right">{{ __('Emergency Contact Number') }}</label>
+                <div class="form-group row">
+                    <label for="emergency_number"
+                        class="col-md-4 col-form-label text-md-right">{{ __('Emergency Contact Number') }}</label>
 
-                <div class="col-md-6">
-                    <input id="emergency_number" type="text" class="form-control{{ $errors->has('emergency_number') ? ' is-invalid' : '' }}" name="emergency_number" value="{{ $data['patientDetail']['emergency_number'] }}" required autofocus>
+                    <div class="col-md-6">
+                        <input id="emergency_number" type="text"
+                            class="form-control{{ $errors->has('emergency_number') ? ' is-invalid' : '' }}"
+                            name="emergency_number" value="{{ $data['patientDetail']['emergency_number'] }}" required
+                            autofocus>
 
-                    @if ($errors->has('emergency_number'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('emergency_number') }}</strong>
-                        </span>
-                    @endif
+                        @if ($errors->has('emergency_number'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('emergency_number') }}</strong>
+                            </span>
+                        @endif
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group row">
-                <label for="emergency_address" class="col-md-4 col-form-label text-md-right">{{ __('Emergency Contact Address') }}</label>
+                <div class="form-group row">
+                    <label for="emergency_address"
+                        class="col-md-4 col-form-label text-md-right">{{ __('Emergency Contact Address') }}</label>
 
-                <div class="col-md-6">
-                    <input id="emergency_address" type="text" class="form-control{{ $errors->has('emergency_address') ? ' is-invalid' : '' }}" name="emergency_address" value="{{ $data['patientDetail']['emergency_address'] }}" required autofocus>
+                    <div class="col-md-6">
+                        <input id="emergency_address" type="text"
+                            class="form-control{{ $errors->has('emergency_address') ? ' is-invalid' : '' }}"
+                            name="emergency_address" value="{{ $data['patientDetail']['emergency_address'] }}" required
+                            autofocus>
 
-                    @if ($errors->has('emergency_address'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('emergency_address') }}</strong>
-                        </span>
-                    @endif
+                        @if ($errors->has('emergency_address'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('emergency_address') }}</strong>
+                            </span>
+                        @endif
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group row">
-                <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Changes</button>
-            </div>
-        </form>
+                <div class="form-group row">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Changes</button>
+                </div>
+            </form>
 
-        {{-- <patients-list :user_data="user_data"></patients-list> --}}
-    </div>
-</main>
-@include('layouts.dashboard.footer')
+            {{-- <patients-list :user_data="user_data"></patients-list> --}}
+        </div>
+    </main>
+    @include('layouts.dashboard.footer')
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dobInput = document.getElementById('dob');
+            const ageInput = document.getElementById('age');
+
+            dobInput.addEventListener('change', function() {
+                const birthDate = new Date(this.value);
+                const today = new Date();
+
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const monthDiff = today.getMonth() - birthDate.getMonth();
+                const dayDiff = today.getDate() - birthDate.getDate();
+
+                if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+                    age--;
+                }
+
+                ageInput.value = age >= 0 ? age : 0;
+            });
+        });
+    </script>
 @endsection

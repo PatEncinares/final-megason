@@ -3,8 +3,11 @@
 @section('content')
     <main>
         <div class="container-fluid" id="app">
-            <h1 class="mt-4"><img class="card-img-top img-thumbnail" style="height: 60px; width : 60px"
-                    src="{{ asset('assets/quick_links/patient.png') }}" alt="Patient Management">Patient Management</h1>
+            <h1 class="mt-4">
+                <img class="save-medical-history card-img-top img-thumbnail" style="height: 60px; width: 60px"
+                    src="{{ asset('assets/quick_links/patient.png') }}" alt="Patient Management">
+                Patient Management
+            </h1>
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item active">Create Medical History</li>
             </ol>
@@ -65,8 +68,7 @@
                 @endphp
 
                 <div class="form-group row">
-                    <label for="last_visit"
-                        class="col-md-4 col-form-label text-md-right">{{ __('Date of Visit') }}</label>
+                    <label for="last_visit" class="col-md-4 col-form-label text-md-right">{{ __('Date of Visit') }}</label>
 
                     <div class="col-md-6">
                         <input id="last_visit" name="last_visit"
@@ -81,7 +83,7 @@
                     @endif
                 </div>
 
-                <div class="form-group row">
+                {{-- <div class="form-group row">
                     <label for="next_visit"
                         class="col-md-4 col-form-label text-md-right">{{ __('Date of Next Visit') }}</label>
 
@@ -102,7 +104,29 @@
                         </span>
                     @endif
 
+                </div> --}}
+
+                {{-- Date --}}
+                <div class="form-group row">
+                    <label for="date_display" class="col-md-4 col-form-label text-md-right">Select Date:</label>
+                    <div class="col-md-6">
+                        <input type="text" id="date_display" class="form-control" placeholder="-- Select Date --"
+                            readonly>
+                        <input type="hidden" id="date" name="date">
+                        <small id="slotCount" class="form-text text-muted mt-2 font-weight-bold"></small>
+                    </div>
                 </div>
+
+                {{-- Time --}}
+                <div class="form-group row">
+                    <label for="real_time" class="col-md-4 col-form-label text-md-right">Select Time:</label>
+                    <div class="col-md-6">
+                        <select name="real_time" id="real_time" class="form-control" disabled>
+                            <option value="">-- Select Time --</option>
+                        </select>
+                    </div>
+                </div>
+
                 <hr>
 
 
@@ -155,4 +179,105 @@
         </div>
     </main>
     @include('layouts.dashboard.footer')
+    <script>
+        let allowedDays = [];
+        let doctorId = '{{ $doctorId ?? Auth::user()->id }}'; // fallback to logged in user
+
+        function weekdayToIndex(day) {
+            return {
+                'Sunday': 0,
+                'Monday': 1,
+                'Tuesday': 2,
+                'Wednesday': 3,
+                'Thursday': 4,
+                'Friday': 5,
+                'Saturday': 6
+            } [day];
+        }
+
+        function setupFlatpickr(allowed) {
+            const visibleInput = document.getElementById('date_display');
+            const hiddenInput = document.getElementById('date');
+
+            const allowedIndexes = allowed.map(weekdayToIndex);
+
+            flatpickr(visibleInput, {
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                disable: [date => !allowedIndexes.includes(date.getDay())],
+                onChange: function(selectedDates, dateStr) {
+                    hiddenInput.value = dateStr;
+                    loadAvailableTimes(doctorId, dateStr);
+                }
+            });
+        }
+
+        function loadAvailableTimes(doctorId, dateStr) {
+            fetch(`/doctor-availability/${doctorId}/${dateStr}`)
+                .then(res => res.json())
+                .then(data => {
+                    const timeInput = document.getElementById('real_time');
+                    const slotCount = document.getElementById('slotCount');
+
+                    if (!data.available || data.remaining_slots === 0) {
+                        timeInput.disabled = true;
+                        timeInput.innerHTML = '<option value="">-- No Slots --</option>';
+                        slotCount.innerText = 'Remaining Slots: 0 (Fully Booked)';
+                        slotCount.classList.add('text-danger');
+                    } else {
+                        timeInput.disabled = false;
+                        slotCount.innerText = `Remaining Slots: ${data.remaining_slots}`;
+                        slotCount.classList.remove('text-danger');
+                        generateTimeOptions(data.start_time, data.end_time);
+                    }
+                });
+        }
+
+        function generateTimeOptions(start, end) {
+            const select = document.getElementById('real_time');
+            select.innerHTML = '<option value="">-- Select Time --</option>';
+
+            const [startHour, startMin] = start.split(':').map(Number);
+            const [endHour, endMin] = end.split(':').map(Number);
+
+            const startTotal = startHour * 60 + startMin;
+            const endTotal = endHour * 60 + endMin;
+
+            for (let t = startTotal; t <= endTotal; t += 15) {
+                const hour = Math.floor(t / 60);
+                const minute = t % 60;
+                const value = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+                const label = formatAMPM(hour, minute);
+
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = label;
+                select.appendChild(option);
+            }
+        }
+
+        function formatAMPM(hour, minute) {
+            const h = hour % 12 || 12;
+            const m = String(minute).padStart(2, '0');
+            const ampm = hour < 12 ? 'AM' : 'PM';
+            return `${h}:${m} ${ampm}`;
+        }
+
+        // Fetch schedule and setup on load
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch(`/doctor-schedule/${doctorId}`)
+                .then(res => res.json())
+                .then(data => {
+                    allowedDays = data.map(s => s.day_of_week.charAt(0).toUpperCase() + s.day_of_week.slice(1));
+                    setupFlatpickr(allowedDays);
+                });
+        });
+    </script>
+    <style scoped>
+        input#date_display[readonly] {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            cursor: pointer;
+        }
+    </style>
 @endsection

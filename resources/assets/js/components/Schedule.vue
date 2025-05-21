@@ -46,9 +46,9 @@
                   ? appointment.doctor.title_name
                   : 'Doctor is no longer active' }}
               </td>
-              <td>{{ appointment.date }}</td>
+              <td>{{ formatDate(appointment.date) }}</td>
               <!-- <td>{{ appointment.real_time }}</td> -->
-               <td>{{ formatTime(appointment.real_time) }}</td>
+              <td>{{ formatTime(appointment.real_time) }}</td>
               <td>{{ appointment.time }}</td>
               <td :class="{
                 pending: appointment.status === 0,
@@ -62,14 +62,36 @@
         </table>
       </div>
 
-      <full-calendar default-view="dayGridMonth" :plugins="calendarPlugins" :events="calendarEvents"
-        @dateClick="handleDateClick" v-else />
+      <!-- <full-calendar default-view="dayGridMonth" :plugins="calendarPlugins" :events="calendarEvents"
+        @dateClick="handleDateClick" v-else /> -->
+      <div class="d-flex gap-2 align-items-center mb-3" v-if="calendar_view">
+
+        <select class="form-control w-auto" v-model="selectedMonth" @change="changeCalendarDate">
+          <option v-for="(month, index) in months" :value="index">{{ month }}</option>
+        </select>
+
+        <select class="form-control w-auto" v-model="selectedYear" @change="changeCalendarDate">
+          <option v-for="year in yearOptions" :value="year">{{ year }}</option>
+        </select>
+      </div>
+
+
+      <!-- <full-calendar :plugins="calendarPlugins" :headerToolbar="calendarHeader" :events="calendarEvents"
+        @dateClick="handleDateClick" default-view="dayGridMonth" v-else /> -->
+
+      <full-calendar v-show="calendar_view" ref="fullCalendar" default-view="dayGridMonth" :plugins="calendarPlugins"
+        :events="calendarEvents" :headerToolbar="{
+          left: 'prev,next today',
+          center: 'title',
+          right: ''
+        }" @dateClick="handleDateClick" />
+
 
       <div v-if="showModal" class="custom-modal-overlay">
         <transition name="fade-scale">
           <div class="custom-modal-content">
             <div class="modal-header">
-              <h5>Schedules for {{ modalDate }}</h5>
+              <h5>Schedules for {{ formatDate(modalDate) }}</h5>
               <button class="close" @click="showModal = false">&times;</button>
             </div>
             <div class="modal-body">
@@ -90,7 +112,7 @@
                       <tr v-for="(a, i) in appointments" :key="i">
                         <td>{{ a.patient ? a.patient.name : 'Unknown' }}</td>
                         <!-- <td>{{ a.real_time }}</td> -->
-                         <td>{{ formatTime(a.real_time) }}</td>
+                        <td>{{ formatTime(a.real_time) }}</td>
                         <td>{{ a.time }}</td>
                         <td>
                           {{ a.status === 0 ? 'Pending' : a.status === 1 ? 'Approved' : 'Canceled' }}
@@ -129,7 +151,16 @@ export default {
       modalDate: '',
       modalAppointments: [],
       showModal: false,
-      calendarPlugins: [dayGridPlugin, interactionPlugin]
+      calendarPlugins: [dayGridPlugin, interactionPlugin],
+      calendarHeader: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth'
+      },
+      selectedMonth: new Date().getMonth(),
+      selectedYear: new Date().getFullYear(),
+      months: moment.months(), // ['January', 'February', ...]
+      yearOptions: Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i),
     };
   },
   components: {
@@ -139,6 +170,11 @@ export default {
     this.getAppointments();
     this.getPatientsList();
     this.getDoctorsList();
+    this.$nextTick(() => {
+      if (this.calendar_view) {
+        this.changeCalendarDate(); // Force initial jump
+      }
+    });
   },
   methods: {
     getAppointments() {
@@ -163,7 +199,16 @@ export default {
         });
     },
     toggleView() {
+      // this.calendar_view = !this.calendar_view;
       this.calendar_view = !this.calendar_view;
+
+      this.$nextTick(() => {
+        if (this.calendar_view) {
+          setTimeout(() => {
+            this.changeCalendarDate();
+          }, 100); // delay to make sure FullCalendar is fully mounted
+        }
+      });
     },
     handleDateClick(info) {
       const selectedDate = info.dateStr;
@@ -180,9 +225,35 @@ export default {
       this.modalAppointments = filtered;
       this.showModal = true;
     },
+
+    changeCalendarDate() {
+      const calendarApi = this.$refs.fullCalendar.getApi();
+      const newDate = moment({ year: this.selectedYear, month: this.selectedMonth, day: 1 }).format('YYYY-MM-DD');
+      calendarApi.gotoDate(newDate);
+    },
+
+    confirmCancel(id) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to cancel this appointment?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, cancel it'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = `/appointments/cancel/${id}`;
+        }
+      });
+    },
+
     formatTime(time) {
       return moment(time, 'HH:mm:ss').format('hh:mm A');
-    } 
+    },
+    formatDate(date) {
+      return moment(date).format('MMMM D, YYYY'); // e.g., May 21, 2025
+    }
   },
   computed: {
     calendarEvents() {

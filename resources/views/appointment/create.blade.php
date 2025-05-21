@@ -240,6 +240,13 @@
     }
 
     $(document).ready(function () {
+
+         $('#patient').select2({
+            placeholder: '-- Select Patient --',
+            allowClear: true,
+            width: '100%'
+        });
+        
         const $doctor = $('#doctor');
         const $date = $('#date');
         const $time = $('#real_time');
@@ -358,6 +365,7 @@
         .catch(() => {
             console.warn("Failed to auto-load schedule for doctor.");
         });
+
 @endif
 
 </script>

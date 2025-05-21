@@ -39,7 +39,7 @@
                     <div class="form-group row">
                         <label for="doctor_id" class="col-md-4 col-form-label text-md-right">Select Doctor:</label>
                         <div class="col-md-6">
-                            <select name="doctor_id" id="doctor_id" class="form-control select2" required>
+                            <select name="doctor_id" id="doctor_id" class="form-control select2" disabled required>
                                 <option value="" disabled selected>-- Select Doctor --</option>
                                 @foreach($data['doctors'] as $doctor)
                                     <option value="{{ $doctor->id }}" {{ old('doctor_id') == $doctor->id ? 'selected' : '' }}>{{ $doctor->name }}</option>
@@ -57,7 +57,7 @@
                     <div class="form-group row">
                         <label for="appointment_id" class="col-md-4 col-form-label text-md-right">Select Appointment:</label>
                         <div class="col-md-6">
-                            <select name="appointment_id" id="appointment_id" class="form-control select2" required>
+                            <select name="appointment_id" id="appointment_id" class="form-control select2" disabled required>
                                 <option value="" disabled selected>-- Select Appointment --</option>
                                 @foreach($data['appointments'] as $appointment)
                                     <option value="{{ $appointment->id }}" {{ old('appointment_id') == $appointment->id ? 'selected' : '' }}>
@@ -153,6 +153,54 @@ document.addEventListener('DOMContentLoaded', function () {
         width: '100%'
     });
 });
+
+$(document).ready(function () {
+    // Initialize Select2
+    $('#patient_id, #doctor_id, #appointment_id').select2({
+        width: '100%',
+        allowClear: true
+    });
+
+    // Disable doctor and appointment selects initially
+    $('#doctor_id').prop('disabled', true);
+    $('#appointment_id').prop('disabled', true);
+
+    $('#patient_id').on('change', function () {
+        let patientId = $(this).val();
+        $('#appointment_id').html('<option value="">-- Select Appointment --</option>').prop('disabled', true).trigger('change');
+        $('#doctor_id').html('<option value="">Loading...</option>').prop('disabled', true).trigger('change');
+
+        if (patientId) {
+            $.get('/get-doctors-by-patient', { patient_id: patientId }, function (doctors) {
+                let options = '<option value="">-- Select Doctor --</option>';
+                doctors.forEach(doctor => {
+                    options += `<option value="${doctor.id}">${doctor.name}</option>`;
+                });
+                $('#doctor_id').html(options).prop('disabled', false).trigger('change');
+            });
+        }
+    });
+
+    $('#doctor_id').on('change', function () {
+        let patientId = $('#patient_id').val();
+        let doctorId = $(this).val();
+        $('#appointment_id').html('<option value="">Loading...</option>').prop('disabled', true).trigger('change');
+
+        if (patientId && doctorId) {
+            $.get('/get-appointments-by-patient-doctor', {
+                patient_id: patientId,
+                doctor_id: doctorId
+            }, function (appointments) {
+                let options = '<option value="">-- Select Appointment --</option>';
+                appointments.forEach(app => {
+                    options += `<option value="${app.id}">${app.date} - ${app.real_time} ${app.time}</option>`;
+                });
+                $('#appointment_id').html(options).prop('disabled', false).trigger('change');
+            });
+        }
+    });
+});
+
 </script>
 @include('layouts.dashboard.footer')
 @endsection

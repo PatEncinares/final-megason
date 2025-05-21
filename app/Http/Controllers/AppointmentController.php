@@ -46,16 +46,16 @@ class AppointmentController extends Controller
     //     } elseif (Auth::user()->type == 3) {
     //         $query->where('user_id', Auth::user()->id);
     //     }
-        
+
     //     $appointments = $query->orderBy('date', 'desc')
     //                           ->orderBy('real_time', 'desc')
     //                           ->get();
-        
+
     //     // Add prefix based on gender
     //     foreach ($appointments as $appointment) {
     //         $gender = strtolower(optional($appointment->doctor->doctorDetails)->gender);
     //         $name = optional($appointment->doctor)->name;
-            
+
     //         if ($gender === 'female') {
     //             $appointment->doctor->title_name = 'Dra. ' . $name;
     //         } else {
@@ -64,7 +64,7 @@ class AppointmentController extends Controller
     //     }
     //     // dd($appointments);
     //     return $appointments;
-        
+
     // }
 
     public function getList()
@@ -78,18 +78,18 @@ class AppointmentController extends Controller
         }
 
         $appointments = $query->orderBy('date', 'desc')
-                            ->orderBy('real_time', 'desc')
-                            ->get();
+            ->orderBy('real_time', 'desc')
+            ->get();
 
         // Add prefix based on gender or fallback if doctor is missing
         // foreach ($appointments as $appointment) {
         //     $doctor = $appointment->doctor;
         //     $doctorDetails = optional($doctor)->doctorDetails;
-        
+
         //     if ($doctor && !empty($doctor->name)) {
         //         $gender = strtolower(optional($doctorDetails)->gender);
         //         $name = $doctor->name;
-        
+
         //         if ($gender === 'female') {
         //             $appointment->doctor_title_name = 'Dra. ' . $name;
         //         } else {
@@ -102,7 +102,7 @@ class AppointmentController extends Controller
         foreach ($appointments as $appointment) {
             $doctor = $appointment->doctor;
             $doctorDetails = optional($doctor)->doctorDetails;
-        
+
             if ($doctor && !empty($doctor->name)) {
                 $gender = strtolower(optional($doctorDetails)->gender);
                 $prefix = $gender === 'female' ? 'Dra. ' : 'Dr. ';
@@ -113,7 +113,7 @@ class AppointmentController extends Controller
                 ];
             }
         }
-        
+
 
         // dd($appointments);
         return $appointments;
@@ -123,11 +123,24 @@ class AppointmentController extends Controller
     public function saveAppointment(Request $request)
     {
         $request->validate([
-            'doctor_id' => 'required|exists:users,id',
-            'patient_id' => 'required|exists:users,id',
-            'date' => 'required|date',
-            'real_time' => 'required|date_format:H:i',
+            'doctor_id'     => 'required|exists:users,id',
+            'patient_id'    => 'required|exists:users,id',
+            'date'          => 'required|date',
+            'real_time'     => 'required|date_format:H:i',
+        ], [
+            'doctor_id.required'        => 'Doctor is required.',
+            'doctor_id.exists'          => 'Selected doctor does not exist.',
+
+            'patient_id.required'       => 'Patient is required.',
+            'patient_id.exists'         => 'Selected patient does not exist.',
+
+            'date.required'             => 'Date is required.',
+            'date.date'                 => 'Please provide a valid date.',
+
+            'real_time.required'        => 'Time is required.',
+            'real_time.date_format'     => 'Time must be in the format HH:MM (24-hour format).',
         ]);
+
         // Get AM/PM time format
         $time_data = date('A', strtotime($request->real_time));
 
@@ -149,9 +162,9 @@ class AppointmentController extends Controller
         //     ->exists();
         // Prevent the same user from booking the same doctor on the same date
         $userDoubleBooking = Appointment::where('date', '=', $request->date)
-        ->where('doctor_id', '=', $request->doctor_id)
-        ->where('user_id', '=', $request->patient_id)
-        ->exists();
+            ->where('doctor_id', '=', $request->doctor_id)
+            ->where('user_id', '=', $request->patient_id)
+            ->exists();
 
 
         // Get appointment limits from settings
@@ -301,24 +314,24 @@ class AppointmentController extends Controller
     {
         $appointment = Appointment::where('id', $request->id)->first();
         $user = User::where('id', $appointment->user_id)->first();
-    
+
         // Safety check
         if (!$appointment || !$user) {
             Alert::error('', 'Unable to approve appointment. Appointment or user not found.');
             return redirect()->back();
         }
-    
+
         $appointment->status = 1; // Approved
         $appointment->save();
-    
+
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Approved an appointment'
         ]);
-    
+
         // Send approval email
         Mail::to($user->email)->send(new AppointmentApprovalMail($appointment, $user));
-    
+
         Alert::success('', 'Appointment approved');
         return redirect()->back();
     }
@@ -328,30 +341,30 @@ class AppointmentController extends Controller
 
         $appointment = Appointment::where('id', $request->id)->first();
         $user = User::where('id', $appointment->user_id)->first();
-    
+
         // Safety check in case appointment or user is not found
         if (!$appointment || !$user) {
             Alert::error('', 'Unable to cancel appointment. Appointment or user not found.');
             return redirect()->back();
         }
-    
+
         $appointment->status = 2;
         $appointment->save();
-    
+
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Canceled an Appointment'
         ]);
-    
+
         // Send cancellation email
         Mail::to($user->email)->send(new AppointmentCancellationMail($appointment, $user));
-    
+
         Alert::success('', 'Appointment canceled');
         return redirect()->back();
     }
 
 
-     public function getDoctorSchedule($id)
+    public function getDoctorSchedule($id)
     {
         // return DoctorSchedule::where('doctor_id', $id)->get();
 
@@ -394,12 +407,10 @@ class AppointmentController extends Controller
     }
 
     public function getDoctorsBySpecialization($id)
-{
-    $doctors = DoctorDetail::where('specialization_id', $id)
-        ->get(['user_id as id', 'fullname']);
+    {
+        $doctors = DoctorDetail::where('specialization_id', $id)
+            ->get(['user_id as id', 'fullname']);
 
-    return response()->json($doctors);
-}
-
-
+        return response()->json($doctors);
+    }
 }

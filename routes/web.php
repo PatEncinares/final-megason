@@ -175,8 +175,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions/delete/{id}','TransactionsController@delete')->name('delete-transaction');
     // Route::get('/transactions/mark_as_paid/{id}','TransactionsController@markAsPaid')->name('mark-as-paid');
     Route::post('/transactions/mark_as_paid', [TransactionsController::class, 'markAsPaid'])->name('mark-as-paid');
-
     Route::get('/transactions/view/{id}','TransactionsController@view')->name('view-transaction');
+    Route::get('/get-doctors-by-patient', [TransactionsController::class, 'getDoctorsByPatient']);
+    Route::get('/get-appointments-by-patient-doctor', [TransactionsController::class, 'getAppointmentsByPatientAndDoctor']);
+
+
+
+
+
+
+
     // accounting
     Route::get('/accounting/financial-report','AccountingController@index')->name('financial-report');
     Route::get('/accounting/daily-earnings-report','AccountingController@dailyEarningsReport')->name('daily-earnings-report');

@@ -233,6 +233,39 @@ class PatientController extends Controller
     public function saveMedicalHistory(Request $request)
     {
 
+        $request->validate([
+            'patient_id'        => 'required|exists:users,id',
+            'complains'         => 'required',
+            'diagnosis'         => 'required',
+            'treatment'         => 'required',
+            'last_visit'        => 'required|date',
+            'date'              => 'required|date',           // next_visit
+            'real_time'         => 'required|date_format:H:i',
+            'attending_doctor'  => 'required|exists:users,id',
+        ], [
+            'patient_id.required'       => 'Patient is required.',
+            'patient_id.exists'         => 'Selected patient does not exist.',
+
+            'complains.required'        => 'Complains field is required.',
+
+            'diagnosis.required'        => 'Diagnosis field is required.',
+
+            'treatment.required'        => 'Treatment field is required.',
+
+            'last_visit.required'       => 'Date of visit is required.',
+            'last_visit.date'           => 'Date of visit must be a valid date.',
+
+            'date.required'             => 'Next visit date is required.',
+            'date.date'                 => 'Next visit date must be a valid date.',
+
+            'real_time.required'        => 'Time of visit is required.',
+            'real_time.date_format'     => 'Time must be in the format HH:MM (24-hour format).',
+
+            'attending_doctor.required' => 'Attending doctor is required.',
+            'attending_doctor.exists'   => 'Selected doctor does not exist.',
+        ]);
+
+
         $amOrPm = Carbon::createFromFormat('H:i', $request->real_time)->format('A');
         $patientAccount = User::where('id', '=', $request->patient_id)->with('patientDetails')->get();
 

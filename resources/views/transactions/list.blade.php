@@ -62,7 +62,7 @@
                                     <td>{{ ucfirst($transaction->status) }}</td>
                                     <td>{{ str_pad($transaction->id, 6, '0', STR_PAD_LEFT) }}</td>
                                     <td>{{ $transaction->patient->name }}</td>
-                                    <td>{{ $transaction->appointment->date }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($transaction->appointment->date)->format('F d, Y') }}</td>
                                     <td>{{ $transaction->doctor_fee }}</td>
                                     <td>{{ $transaction->lab_fee }}</td>
                                     <td>{{ $transaction->discount ?? '0' }}%</td>

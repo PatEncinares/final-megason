@@ -18,12 +18,10 @@
                 <input type="hidden" name="patient_id" value="{{ $data['patientAccount']['id'] }}">
 
                 <div class="form-group row">
-                    <label for="complains" class="col-md-4 col-form-label text-md-right">{{ __('Complains') }}</label>
-
+                    <label for="complains" class="col-md-4 col-form-label text-md-right">Complains</label>
                     <div class="col-md-6">
                         <small>*Note: Provide a detailed explanation of patient complains and symptoms</small>
-                        <textarea name="complains" class="form-control" id="" cols="15" rows="5" required></textarea>
-
+                        <textarea name="complains" class="form-control{{ $errors->has('complains') ? ' is-invalid' : '' }}" rows="5">{{ old('complains') }}</textarea>
                         @if ($errors->has('complains'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('complains') }}</strong>
@@ -33,12 +31,10 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="diagnosis" class="col-md-4 col-form-label text-md-right">{{ __('Diagnosis') }}</label>
-
+                    <label for="diagnosis" class="col-md-4 col-form-label text-md-right">Diagnosis</label>
                     <div class="col-md-6">
                         <small>*Note: Provide a detailed diagnosis and findings</small>
-                        <textarea name="diagnosis" class="form-control" id="" cols="15" rows="5" required></textarea>
-
+                        <textarea name="diagnosis" class="form-control{{ $errors->has('diagnosis') ? ' is-invalid' : '' }}" rows="5">{{ old('diagnosis') }}</textarea>
                         @if ($errors->has('diagnosis'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('diagnosis') }}</strong>
@@ -48,19 +44,16 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="treatment" class="col-md-4 col-form-label text-md-right">{{ __('Treatment') }}</label>
-
+                    <label for="treatment" class="col-md-4 col-form-label text-md-right">Treatment</label>
                     <div class="col-md-6">
                         <small>*Note: Provide a detailed treatment procedures, schedule of medication etc.</small>
-                        <textarea name="treatment" class="form-control" id="" cols="15" rows="5" required></textarea>
-
+                        <textarea name="treatment" class="form-control{{ $errors->has('treatment') ? ' is-invalid' : '' }}" rows="5">{{ old('treatment') }}</textarea>
                         @if ($errors->has('treatment'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('treatment') }}</strong>
                             </span>
                         @endif
                     </div>
-
                 </div>
 
                 @php
@@ -68,52 +61,33 @@
                 @endphp
 
                 <div class="form-group row">
-                    <label for="last_visit" class="col-md-4 col-form-label text-md-right">{{ __('Date of Visit') }}</label>
-
+                    <label for="last_visit" class="col-md-4 col-form-label text-md-right">Date of Visit</label>
                     <div class="col-md-6">
-                        <input id="last_visit" name="last_visit"
-                            class="form-control{{ $errors->has('last_visit') ? ' is-invalid' : '' }}" type="date"
-                            value="{{ $today }}" max="{{ $today }}" required readonly>
+                        <input id="last_visit" name="last_visit" type="date"
+                            class="form-control{{ $errors->has('last_visit') ? ' is-invalid' : '' }}"
+                            value="{{ old('last_visit', $today) }}" readonly>
+                        @if ($errors->has('last_visit'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('last_visit') }}</strong>
+                            </span>
+                        @endif
                     </div>
-
-                    @if ($errors->has('last_visit'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('last_visit') }}</strong>
-                        </span>
-                    @endif
                 </div>
 
-                {{-- <div class="form-group row">
-                    <label for="next_visit"
-                        class="col-md-4 col-form-label text-md-right">{{ __('Date of Next Visit') }}</label>
-
-                    <div class="col-md-6">
-                        @php
-                            $tomorrow = \Carbon\Carbon::tomorrow()->format('Y-m-d');
-                        @endphp
-
-                        <input id="next_visit" name="next_visit"
-                            class="form-control{{ $errors->has('next_visit') ? ' is-invalid' : '' }}" type="date"
-                            min="{{ $tomorrow }}" value="{{ $tomorrow }}" required>
-
-                    </div>
-
-                    @if ($errors->has('next_visit'))
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('next_visit') }}</strong>
-                        </span>
-                    @endif
-
-                </div> --}}
-
-                {{-- Date --}}
+                {{-- Date (Next Visit) --}}
                 <div class="form-group row">
                     <label for="date_display" class="col-md-4 col-form-label text-md-right">Select Date:</label>
                     <div class="col-md-6">
-                        <input type="text" id="date_display" class="form-control" placeholder="-- Select Date --"
-                            readonly>
-                        <input type="hidden" id="date" name="date">
+                        <input type="text" id="date_display"
+                            class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}"
+                            placeholder="-- Select Date --" readonly>
+                        <input type="hidden" id="date" name="date" value="{{ old('date') }}">
                         <small id="slotCount" class="form-text text-muted mt-2 font-weight-bold"></small>
+                        @if ($errors->has('date'))
+                            <span class="invalid-feedback d-block" role="alert">
+                                <strong>{{ $errors->first('date') }}</strong>
+                            </span>
+                        @endif
                     </div>
                 </div>
 
@@ -121,9 +95,15 @@
                 <div class="form-group row">
                     <label for="real_time" class="col-md-4 col-form-label text-md-right">Select Time:</label>
                     <div class="col-md-6">
-                        <select name="real_time" id="real_time" class="form-control" disabled>
+                        <select name="real_time" id="real_time"
+                            class="form-control{{ $errors->has('real_time') ? ' is-invalid' : '' }}" disabled>
                             <option value="">-- Select Time --</option>
                         </select>
+                        @if ($errors->has('real_time'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('real_time') }}</strong>
+                            </span>
+                        @endif
                     </div>
                 </div>
 

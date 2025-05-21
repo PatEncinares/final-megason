@@ -64011,6 +64011,28 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -64030,7 +64052,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       modalDate: '',
       modalAppointments: [],
       showModal: false,
-      calendarPlugins: [__WEBPACK_IMPORTED_MODULE_3__fullcalendar_daygrid__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__fullcalendar_interaction__["a" /* default */]]
+      calendarPlugins: [__WEBPACK_IMPORTED_MODULE_3__fullcalendar_daygrid__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__fullcalendar_interaction__["a" /* default */]],
+      calendarHeader: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth'
+      },
+      selectedMonth: new Date().getMonth(),
+      selectedYear: new Date().getFullYear(),
+      months: __WEBPACK_IMPORTED_MODULE_1_moment___default.a.months(), // ['January', 'February', ...]
+      yearOptions: Array.from({ length: 10 }, function (_, i) {
+        return new Date().getFullYear() - 5 + i;
+      })
     };
   },
 
@@ -64038,48 +64071,66 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     FullCalendar: __WEBPACK_IMPORTED_MODULE_2__fullcalendar_vue__["a" /* default */]
   },
   mounted: function mounted() {
+    var _this = this;
+
     this.getAppointments();
     this.getPatientsList();
     this.getDoctorsList();
+    this.$nextTick(function () {
+      if (_this.calendar_view) {
+        _this.changeCalendarDate(); // Force initial jump
+      }
+    });
   },
 
   methods: {
     getAppointments: function getAppointments() {
-      var _this = this;
+      var _this2 = this;
 
       this.$http.get('/get-appointments').then(function (res) {
-        _this.appointments = res.data;
+        _this2.appointments = res.data;
       }).catch(function (err) {
         return console.log(err);
       });
     },
     getPatientsList: function getPatientsList() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.$http.get('/getPatientList').then(function (res) {
         var temp = {};
         res.data.forEach(function (p) {
           temp[p.user_id] = p.user.name;
         });
-        _this2.patients_list = temp;
+        _this3.patients_list = temp;
       });
     },
     getDoctorsList: function getDoctorsList() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.$http.get('/getDoctorsList').then(function (res) {
         var temp = {};
         res.data.forEach(function (d) {
           temp[d.user_id] = d.fullname;
         });
-        _this3.doctors_list = temp;
+        _this4.doctors_list = temp;
       });
     },
     toggleView: function toggleView() {
+      var _this5 = this;
+
+      // this.calendar_view = !this.calendar_view;
       this.calendar_view = !this.calendar_view;
+
+      this.$nextTick(function () {
+        if (_this5.calendar_view) {
+          setTimeout(function () {
+            _this5.changeCalendarDate();
+          }, 100); // delay to make sure FullCalendar is fully mounted
+        }
+      });
     },
     handleDateClick: function handleDateClick(info) {
-      var _this4 = this;
+      var _this6 = this;
 
       var selectedDate = info.dateStr;
       var userType = this.user_data.type;
@@ -64089,11 +64140,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       });
       if (userType === 2) {
         filtered = filtered.filter(function (a) {
-          return a.doctor && a.doctor.user_id == _this4.user_data.id;
+          return a.doctor && a.doctor.user_id == _this6.user_data.id;
         });
       } else if (userType === 3) {
         filtered = filtered.filter(function (a) {
-          return a.patient && a.patient.user_id == _this4.user_data.id;
+          return a.patient && a.patient.user_id == _this6.user_data.id;
         });
       }
 
@@ -64101,8 +64152,31 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this.modalAppointments = filtered;
       this.showModal = true;
     },
+    changeCalendarDate: function changeCalendarDate() {
+      var calendarApi = this.$refs.fullCalendar.getApi();
+      var newDate = __WEBPACK_IMPORTED_MODULE_1_moment___default()({ year: this.selectedYear, month: this.selectedMonth, day: 1 }).format('YYYY-MM-DD');
+      calendarApi.gotoDate(newDate);
+    },
+    confirmCancel: function confirmCancel(id) {
+      __WEBPACK_IMPORTED_MODULE_0_sweetalert2___default.a.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to cancel this appointment?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, cancel it'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          window.location.href = '/appointments/cancel/' + id;
+        }
+      });
+    },
     formatTime: function formatTime(time) {
       return __WEBPACK_IMPORTED_MODULE_1_moment___default()(time, 'HH:mm:ss').format('hh:mm A');
+    },
+    formatDate: function formatDate(date) {
+      return __WEBPACK_IMPORTED_MODULE_1_moment___default()(date).format('MMMM D, YYYY'); // e.g., May 21, 2025
     }
   },
   computed: {
@@ -68556,7 +68630,9 @@ var render = function() {
                               )
                             ]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(appointment.date))]),
+                            _c("td", [
+                              _vm._v(_vm._s(_vm.formatDate(appointment.date)))
+                            ]),
                             _vm._v(" "),
                             _c("td", [
                               _vm._v(
@@ -68597,14 +68673,112 @@ var render = function() {
                 ]
               )
             ])
-          : _c("full-calendar", {
-              attrs: {
-                "default-view": "dayGridMonth",
-                plugins: _vm.calendarPlugins,
-                events: _vm.calendarEvents
-              },
-              on: { dateClick: _vm.handleDateClick }
-            }),
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.calendar_view
+          ? _c("div", { staticClass: "d-flex gap-2 align-items-center mb-3" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.selectedMonth,
+                      expression: "selectedMonth"
+                    }
+                  ],
+                  staticClass: "form-control w-auto",
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.selectedMonth = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      },
+                      _vm.changeCalendarDate
+                    ]
+                  }
+                },
+                _vm._l(_vm.months, function(month, index) {
+                  return _c("option", { domProps: { value: index } }, [
+                    _vm._v(_vm._s(month))
+                  ])
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.selectedYear,
+                      expression: "selectedYear"
+                    }
+                  ],
+                  staticClass: "form-control w-auto",
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.selectedYear = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      },
+                      _vm.changeCalendarDate
+                    ]
+                  }
+                },
+                _vm._l(_vm.yearOptions, function(year) {
+                  return _c("option", { domProps: { value: year } }, [
+                    _vm._v(_vm._s(year))
+                  ])
+                }),
+                0
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("full-calendar", {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.calendar_view,
+              expression: "calendar_view"
+            }
+          ],
+          ref: "fullCalendar",
+          attrs: {
+            "default-view": "dayGridMonth",
+            plugins: _vm.calendarPlugins,
+            events: _vm.calendarEvents,
+            headerToolbar: {
+              left: "prev,next today",
+              center: "title",
+              right: ""
+            }
+          },
+          on: { dateClick: _vm.handleDateClick }
+        }),
         _vm._v(" "),
         _vm.showModal
           ? _c(
@@ -68615,7 +68789,10 @@ var render = function() {
                   _c("div", { staticClass: "custom-modal-content" }, [
                     _c("div", { staticClass: "modal-header" }, [
                       _c("h5", [
-                        _vm._v("Schedules for " + _vm._s(_vm.modalDate))
+                        _vm._v(
+                          "Schedules for " +
+                            _vm._s(_vm.formatDate(_vm.modalDate))
+                        )
                       ]),
                       _vm._v(" "),
                       _c(

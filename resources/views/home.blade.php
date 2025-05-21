@@ -220,6 +220,7 @@
                             <p><strong>Treatment:</strong> <span id="mh-treatment">Loading...</span></p>
                             <p><strong>Last Visit:</strong> <span id="mh-last-visit">Loading...</span></p>
                             <p><strong>Next Visit:</strong> <span id="mh-next-visit">Loading...</span></p>
+                            <p><strong>Time:</strong> <span id="mh-time">Loading...</span></p>
                         </div>
                     </div>
                 </div>
@@ -233,6 +234,32 @@
     {{-- Scripts --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        function formatTime(time) {
+            if (!time) return '';
+            const [hour, minute, second] = time.split(':');
+            const date = new Date();
+            date.setHours(hour);
+            date.setMinutes(minute);
+            date.setSeconds(second || 0);
+
+            return date.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }); // e.g., May 21, 2025
+        }
+
+
         document.addEventListener("DOMContentLoaded", function() {
             fetch('/home_dashboard')
                 .then(res => res.json())
@@ -275,7 +302,8 @@
                                 datasets: [{
                                     data: data.breakdown.values,
                                     backgroundColor: ['#007bff', '#28a745', '#ffc107',
-                                        '#dc3545']
+                                        '#dc3545'
+                                    ]
                                 }]
                             },
                             options: {
@@ -301,7 +329,8 @@
                                     label: '₱ Sales',
                                     data: data.sales,
                                     backgroundColor: ['#17a2b8', '#6f42c1', '#ffc107',
-                                        '#28a745']
+                                        '#28a745'
+                                    ]
                                 }]
                             },
                             options: {
@@ -331,7 +360,7 @@
                                 <td>${app.name}</td>
                                 <td>${app.doctor}</td>
                                 <td>${app.date}</td>
-                                <td>${app.time}</td>
+                                <td>${formatTime(app.time)}</td>
                             </tr>
                         `;
                             });
@@ -351,7 +380,7 @@
                             <tr>
                                 <td>${app.doctor}</td>
                                 <td>${app.date}</td>
-                                <td>${app.time}</td>
+                                <td>${formatTime(app.time)}</td>
                             </tr>
                         `;
                             });
@@ -381,12 +410,14 @@
                     }
 
                     const mh = data.latest_medical_history;
+                    
                     if (mh) {
                         document.getElementById('mh-complains').textContent = mh.complains;
                         document.getElementById('mh-diagnosis').textContent = mh.diagnosis;
                         document.getElementById('mh-treatment').textContent = mh.treatment;
-                        document.getElementById('mh-last-visit').textContent = mh.last_visit;
-                        document.getElementById('mh-next-visit').textContent = mh.next_visit;
+                        document.getElementById('mh-last-visit').textContent = formatDate(mh.last_visit);
+                        document.getElementById('mh-next-visit').textContent = formatDate(mh.next_visit);
+                        document.getElementById('mh-time').textContent = formatTime(mh.time);
                     } else {
                         const mh = data.latest_medical_history;
                         const mhSection = document.getElementById('medical-history-section');
@@ -395,8 +426,9 @@
                             document.getElementById('mh-complains').textContent = mh.complains;
                             document.getElementById('mh-diagnosis').textContent = mh.diagnosis;
                             document.getElementById('mh-treatment').textContent = mh.treatment;
-                            document.getElementById('mh-last-visit').textContent = mh.last_visit;
-                            document.getElementById('mh-next-visit').textContent = mh.next_visit;
+                            document.getElementById('mh-last-visit').textContent = formatDate(mh.last_visit);
+                            document.getElementById('mh-next-visit').textContent = formatDate(mh.next_visit);
+                            document.getElementById('mh-time').textContent = formatTime(mh.time);
                         } else if (mhSection) {
                             mhSection.innerHTML = `<p class="text-muted">No medical history found.</p>`;
                         }

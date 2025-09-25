@@ -52,6 +52,7 @@ class UsersController extends Controller
     }
 
     public function save(Request $request){
+
         // create user
         $request->validate([
             'name' => [
@@ -66,7 +67,7 @@ class UsersController extends Controller
                 'regex:/^(\+)(\d{12})$/',
                 'max:13'
             ],
-            'user_type' => 'required|in:admin,doctor,staff', // adjust values to your actual roles
+            'user_type' => 'required', // adjust values to your actual roles
         ], [
             'name.required' => 'Name is required.',
             'name.string' => 'Name must be a valid string.',
@@ -81,7 +82,6 @@ class UsersController extends Controller
             'contact_number.max' => 'Phone number must be 13 characters max, including +63 prefix.',
         
             'user_type.required' => 'User type is required.',
-            'user_type.in' => 'User type must be one of the following: admin, doctor, or staff.',
         ]);
         
 
@@ -109,12 +109,12 @@ class UsersController extends Controller
             ]);
         }
 
-        if($user->type != 1 && $user->type != 3){
-            // create employee record if not admin and patient
-            $newEmployee = Employee::create([
-                'user_id' => $user->id
-            ]);
-        }
+        // if($user->type != 1 && $user->type != 3){
+        //     // create employee record if not admin and patient
+        //     $newEmployee = Employee::create([
+        //         'user_id' => $user->id
+        //     ]);
+        // }
 
         //mail credentials
         $data = [
@@ -261,19 +261,38 @@ class UsersController extends Controller
         return $randomstr;
     }
 
-    public function delete(Request $request){
-        $user = User::where('id','=',$request->id)->get();
-        $user[0]->delete();
+    // public function delete(Request $request){
+    //     dd($request);
+    //     $user = User::where('id','=',$request->id)->get();
+    //     $user[0]->delete();
+
+    //     ActivityLog::create([
+    //         'user_id' => Auth::user()->id,
+    //         'activity' => 'Deleted a user account'
+    //     ]);
+
+    //     Alert::success('', 'User Deleted!');
+    //     return redirect()->route('user-list');
+
+    // }
+
+
+    public function delete($id)
+    {
+        // dd($id); // debug if needed
+
+        $user = User::findOrFail($id);   // returns a single model, not a collection
+        $user->delete();
 
         ActivityLog::create([
-            'user_id' => Auth::user()->id,
-            'activity' => 'Deleted a user account'
+            'user_id'  => Auth::id(),
+            'activity' => 'Deleted a user account',
         ]);
 
         Alert::success('', 'User Deleted!');
         return redirect()->route('user-list');
-
     }
+
 
     public function profile(){
         $user = User::where('id', Auth::user()->id)->with('usertype','usertype.permissions')->get();

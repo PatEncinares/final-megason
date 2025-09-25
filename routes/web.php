@@ -137,15 +137,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/lab-result/saveXray','LabResultController@saveXray')->name('save-xray');
     Route::post('/lab-result/saveUltrasound','LabResultController@saveUltrasound')->name('save-ultrasound');
     // employees
-    Route::get('/employees/list','EmployeeController@getList')->name('get-employees-list');
-    Route::get('/employees/timesheet/{id}','EmployeeController@timesheet')->name('employee-timesheet');
-    Route::post('/employees/payroll','EmployeeController@savePayroll')->name('save-payroll');
-    Route::get('/payroll/{id}','EmployeeController@getPayroll')->name('get-payroll');
-    Route::get('/payroll','EmployeeController@payrollList')->name('payroll-list');
-    Route::get('/employees/edit-daily-rate/{id}','EmployeeController@editDailyRate')->name('edit-daily-rate');
-    Route::post('/employees/edit-daily-rate/save','EmployeeController@saveDailyRate')->name('save-daily-rate');
-    Route::get('/employees/time-in','EmployeeController@timeIn')->name('time-in');
-    Route::get('/employees/time-out','EmployeeController@timeOut')->name('time-out');
+    // Route::get('/employees/list','EmployeeController@getList')->name('get-employees-list');
+    // Route::get('/employees/timesheet/{id}','EmployeeController@timesheet')->name('employee-timesheet');
+    // Route::post('/employees/payroll','EmployeeController@savePayroll')->name('save-payroll');
+    // Route::get('/payroll/{id}','EmployeeController@getPayroll')->name('get-payroll');
+    // Route::get('/payroll','EmployeeController@payrollList')->name('payroll-list');
+    // Route::get('/employees/edit-daily-rate/{id}','EmployeeController@editDailyRate')->name('edit-daily-rate');
+    // Route::post('/employees/edit-daily-rate/save','EmployeeController@saveDailyRate')->name('save-daily-rate');
+    // Route::get('/employees/time-in','EmployeeController@timeIn')->name('time-in');
+    // Route::get('/employees/time-out','EmployeeController@timeOut')->name('time-out');
 
     // category
     Route::get('/category/list','CategoryController@list')->name('get-category-list');
@@ -194,7 +194,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/users/save','UsersController@save')->name('save-user');
     Route::get('/users/edit/{id}','UsersController@edit')->name('edit-user');
     Route::post('/users/update','UsersController@update')->name('update-user');
-    Route::get('/users/delete/{id}','UsersController@delete')->name('delete-user');
+    // Route::get('/users/delete/{id}','UsersController@delete')->name('delete-user');
+    Route::get('users/delete/{id}', 'UsersController@delete')->name('delete-user');
+
     Route::get('/users/activity-log','UsersController@getActivities')->name('activity-log');
 
     // settings

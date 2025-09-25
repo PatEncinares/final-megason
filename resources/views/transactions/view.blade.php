@@ -70,16 +70,16 @@
                         {{-- Clinic Addresses (print only) --}}
                         <div class="row">
                             <div class="col-lg-6 d-none d-print-block">
-                                <b>MAKATI I:</b> GF Banyan Place Building, 366 JP Rizal St., Brgy. Tejeros, Makati City <br>
+                                {{-- <b>MAKATI I:</b> GF Banyan Place Building, 366 JP Rizal St., Brgy. Tejeros, Makati City <br>
                                 <b>MAKATI II:</b> 35 JP Rizal ext. Cor. Kamagong St., Brgy. Comembo, Makati City <br>
-                                <b>MANDALUYONG:</b> GF The Boni Tower, 602 Boni Ave., Mandaluyong City <br>
+                                <b>MANDALUYONG:</b> GF The Boni Tower, 602 Boni Ave., Mandaluyong City <br> --}}
                                 <b>STA. ROSA:</b> Units 2-3 Levant Business Center, Brgy. Tagapo, Sta Rosa, Laguna <br>
                             </div>
                             <div class="col-lg-6 d-none d-print-block">
-                                <b>ALABANG:</b> 2nd Flr Erlinda Bldg, 257 Montillano St., Alabang, Muntinlupa <br>
+                                {{-- <b>ALABANG:</b> 2nd Flr Erlinda Bldg, 257 Montillano St., Alabang, Muntinlupa <br>
                                 <b>ANTIPOLO:</b> 174B Marcos Highway, Masinag, Brgy. Mayamot <br>
                                 <b>MARIKINA:</b> Unit 23 Alicante Tower, Marquinton Residences, Marikina City <br>
-                                <b>TAYTAY:</b> #1 Mahinhin cor. Kadalagahan Street, Brgy. Dolores, Taytay, Rizal <br><br><br>
+                                <b>TAYTAY:</b> #1 Mahinhin cor. Kadalagahan Street, Brgy. Dolores, Taytay, Rizal <br><br><br> --}}
                             </div>
                         </div>
 

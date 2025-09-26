@@ -63879,7 +63879,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.custom-modal-overlay[data-v-2ec9e84e] {\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  background: rgba(0, 0, 0, 0.5);\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -webkit-box-align: center;\r\n      -ms-flex-align: center;\r\n          align-items: center;\r\n  -webkit-box-pack: center;\r\n      -ms-flex-pack: center;\r\n          justify-content: center;\r\n  z-index: 1050;\n}\n.custom-modal-content[data-v-2ec9e84e] {\r\n  background: white;\r\n  border-radius: 12px;\r\n  padding: 30px;\r\n  max-width: 950px;\r\n  width: 95%;\r\n  max-height: 90vh;\r\n  /* 💡 LIMIT HEIGHT */\r\n  overflow-y: auto;\r\n  /* 💡 ENABLE SCROLL */\r\n  -webkit-box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);\r\n          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);\n}\n.modal-header[data-v-2ec9e84e] {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -webkit-box-pack: justify;\r\n      -ms-flex-pack: justify;\r\n          justify-content: space-between;\r\n  -webkit-box-align: center;\r\n      -ms-flex-align: center;\r\n          align-items: center;\n}\n.close[data-v-2ec9e84e] {\r\n  background: none;\r\n  border: none;\r\n  font-size: 28px;\r\n  line-height: 1;\r\n  cursor: pointer;\n}\n.fade-scale-enter-active[data-v-2ec9e84e] {\r\n  -webkit-animation: fadeInScale-data-v-2ec9e84e 0.3s ease-out forwards;\r\n          animation: fadeInScale-data-v-2ec9e84e 0.3s ease-out forwards;\n}\n.fade-scale-leave-active[data-v-2ec9e84e] {\r\n  -webkit-animation: fadeOutScale-data-v-2ec9e84e 0.2s ease-in forwards;\r\n          animation: fadeOutScale-data-v-2ec9e84e 0.2s ease-in forwards;\n}\n@-webkit-keyframes fadeInScale-data-v-2ec9e84e {\n0% {\r\n    opacity: 0;\r\n    -webkit-transform: scale(0.9);\r\n            transform: scale(0.9);\n}\n100% {\r\n    opacity: 1;\r\n    -webkit-transform: scale(1);\r\n            transform: scale(1);\n}\n}\n@keyframes fadeInScale-data-v-2ec9e84e {\n0% {\r\n    opacity: 0;\r\n    -webkit-transform: scale(0.9);\r\n            transform: scale(0.9);\n}\n100% {\r\n    opacity: 1;\r\n    -webkit-transform: scale(1);\r\n            transform: scale(1);\n}\n}\n@-webkit-keyframes fadeOutScale-data-v-2ec9e84e {\n0% {\r\n    opacity: 1;\r\n    -webkit-transform: scale(1);\r\n            transform: scale(1);\n}\n100% {\r\n    opacity: 0;\r\n    -webkit-transform: scale(0.9);\r\n            transform: scale(0.9);\n}\n}\n@keyframes fadeOutScale-data-v-2ec9e84e {\n0% {\r\n    opacity: 1;\r\n    -webkit-transform: scale(1);\r\n            transform: scale(1);\n}\n100% {\r\n    opacity: 0;\r\n    -webkit-transform: scale(0.9);\r\n            transform: scale(0.9);\n}\n}\r\n", ""]);
+exports.push([module.i, "\n.custom-modal-overlay[data-v-2ec9e84e] {\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  background: rgba(0, 0, 0, 0.5);\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -webkit-box-align: center;\r\n      -ms-flex-align: center;\r\n          align-items: center;\r\n  -webkit-box-pack: center;\r\n      -ms-flex-pack: center;\r\n          justify-content: center;\r\n  z-index: 1050;\n}\n.custom-modal-content[data-v-2ec9e84e] {\r\n  background: white;\r\n  border-radius: 12px;\r\n  padding: 30px;\r\n  max-width: 950px;\r\n  width: 95%;\r\n  max-height: 90vh;\r\n  overflow-y: auto;\r\n  -webkit-box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);\r\n          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);\n}\n.modal-header[data-v-2ec9e84e] {\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -webkit-box-pack: justify;\r\n      -ms-flex-pack: justify;\r\n          justify-content: space-between;\r\n  -webkit-box-align: center;\r\n      -ms-flex-align: center;\r\n          align-items: center;\n}\n.close[data-v-2ec9e84e] {\r\n  background: none;\r\n  border: none;\r\n  font-size: 28px;\r\n  line-height: 1;\r\n  cursor: pointer;\n}\n.fade-scale-enter-active[data-v-2ec9e84e] { -webkit-animation: fadeInScale-data-v-2ec9e84e 0.3s ease-out forwards; animation: fadeInScale-data-v-2ec9e84e 0.3s ease-out forwards;\n}\n.fade-scale-leave-active[data-v-2ec9e84e] { -webkit-animation: fadeOutScale-data-v-2ec9e84e 0.2s ease-in forwards; animation: fadeOutScale-data-v-2ec9e84e 0.2s ease-in forwards;\n}\n@-webkit-keyframes fadeInScale-data-v-2ec9e84e {\n0% { opacity: 0; -webkit-transform: scale(0.9); transform: scale(0.9);\n}\n100% { opacity: 1; -webkit-transform: scale(1); transform: scale(1);\n}\n}\n@keyframes fadeInScale-data-v-2ec9e84e {\n0% { opacity: 0; -webkit-transform: scale(0.9); transform: scale(0.9);\n}\n100% { opacity: 1; -webkit-transform: scale(1); transform: scale(1);\n}\n}\n@-webkit-keyframes fadeOutScale-data-v-2ec9e84e {\n0% { opacity: 1; -webkit-transform: scale(1); transform: scale(1);\n}\n100% { opacity: 0; -webkit-transform: scale(0.9); transform: scale(0.9);\n}\n}\n@keyframes fadeOutScale-data-v-2ec9e84e {\n0% { opacity: 1; -webkit-transform: scale(1); transform: scale(1);\n}\n100% { opacity: 0; -webkit-transform: scale(0.9); transform: scale(0.9);\n}\n}\r\n\r\n/* Status text colors */\n.pending[data-v-2ec9e84e] { color: #856404; font-weight: 600;\n}   /* amber/brown */\n.approved[data-v-2ec9e84e] { color: #004085; font-weight: 600;\n}  /* blue */\n.canceled[data-v-2ec9e84e] { color: #721c24; font-weight: 600;\n}  /* red */\n.completed[data-v-2ec9e84e] { color: #155724; font-weight: 600;\n} /* green */\r\n", ""]);
 
 // exports
 
@@ -63899,6 +63899,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__fullcalendar_interaction__ = __webpack_require__(251);
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -64060,16 +64071,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       },
       selectedMonth: new Date().getMonth(),
       selectedYear: new Date().getFullYear(),
-      months: __WEBPACK_IMPORTED_MODULE_1_moment___default.a.months(), // ['January', 'February', ...]
+      months: __WEBPACK_IMPORTED_MODULE_1_moment___default.a.months(),
       yearOptions: Array.from({ length: 10 }, function (_, i) {
         return new Date().getFullYear() - 5 + i;
       })
     };
   },
 
-  components: {
-    FullCalendar: __WEBPACK_IMPORTED_MODULE_2__fullcalendar_vue__["a" /* default */]
-  },
+  components: { FullCalendar: __WEBPACK_IMPORTED_MODULE_2__fullcalendar_vue__["a" /* default */] },
   mounted: function mounted() {
     var _this = this;
 
@@ -64118,14 +64127,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     toggleView: function toggleView() {
       var _this5 = this;
 
-      // this.calendar_view = !this.calendar_view;
       this.calendar_view = !this.calendar_view;
-
       this.$nextTick(function () {
         if (_this5.calendar_view) {
           setTimeout(function () {
             _this5.changeCalendarDate();
-          }, 100); // delay to make sure FullCalendar is fully mounted
+          }, 100);
         }
       });
     },
@@ -64134,10 +64141,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       var selectedDate = info.dateStr;
       var userType = this.user_data.type;
-
       var filtered = this.appointments.filter(function (a) {
         return a.date === selectedDate;
       });
+
       if (userType === 2) {
         filtered = filtered.filter(function (a) {
           return a.doctor && a.doctor.user_id == _this6.user_data.id;
@@ -64172,11 +64179,33 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       });
     },
+    confirmDone: function confirmDone(id) {
+      __WEBPACK_IMPORTED_MODULE_0_sweetalert2___default.a.fire({
+        title: 'Mark as Done?',
+        text: 'Confirm the patient has completed the checkup.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, mark as done'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          // Same pattern as cancel: do a redirect to a controller action.
+          window.location.href = '/appointments/complete/' + id;
+
+          // If you prefer Ajax instead, use:
+          // this.$http.post(`/appointments/complete/${id}`).then(() => this.getAppointments());
+        }
+      });
+    },
     formatTime: function formatTime(time) {
       return __WEBPACK_IMPORTED_MODULE_1_moment___default()(time, 'HH:mm:ss').format('hh:mm A');
     },
     formatDate: function formatDate(date) {
-      return __WEBPACK_IMPORTED_MODULE_1_moment___default()(date).format('MMMM D, YYYY'); // e.g., May 21, 2025
+      return __WEBPACK_IMPORTED_MODULE_1_moment___default()(date).format('MMMM D, YYYY');
+    },
+    statusLabel: function statusLabel(s) {
+      return s === 0 ? 'Pending' : s === 1 ? 'Approved' : s === 2 ? 'Canceled' : s === 3 ? 'Completed' : 'Unknown';
     }
   },
   computed: {
@@ -68582,11 +68611,12 @@ var render = function() {
                         _vm._l(_vm.appointments, function(appointment, index) {
                           return _c("tr", { key: index }, [
                             _c("td", [
-                              appointment.status !== 2
+                              appointment.status !== 2 &&
+                              appointment.status !== 3
                                 ? _c(
                                     "button",
                                     {
-                                      staticClass: "btn btn-danger",
+                                      staticClass: "btn btn-danger mr-2",
                                       on: {
                                         click: function($event) {
                                           return _vm.confirmCancel(
@@ -68600,10 +68630,11 @@ var render = function() {
                                       _vm._v(" Cancel\n              ")
                                     ]
                                   )
-                                : _c(
+                                : appointment.status === 2
+                                ? _c(
                                     "button",
                                     {
-                                      staticClass: "btn btn-danger",
+                                      staticClass: "btn btn-danger mr-2",
                                       attrs: { disabled: "" }
                                     },
                                     [
@@ -68611,6 +68642,38 @@ var render = function() {
                                       _vm._v(" Canceled\n              ")
                                     ]
                                   )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              appointment.status !== 3 &&
+                              appointment.status !== 2
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-success",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.confirmDone(appointment.id)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("i", { staticClass: "fa fa-check" }),
+                                      _vm._v(" Done\n              ")
+                                    ]
+                                  )
+                                : appointment.status === 3
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-success",
+                                      attrs: { disabled: "" }
+                                    },
+                                    [
+                                      _c("i", { staticClass: "fa fa-check" }),
+                                      _vm._v(" Completed\n              ")
+                                    ]
+                                  )
+                                : _vm._e()
                             ]),
                             _vm._v(" "),
                             _c("td", [
@@ -68648,18 +68711,15 @@ var render = function() {
                                 class: {
                                   pending: appointment.status === 0,
                                   approved: appointment.status === 1,
-                                  canceled: appointment.status === 2
+                                  canceled: appointment.status === 2,
+                                  completed: appointment.status === 3
                                 }
                               },
                               [
                                 _vm._v(
                                   "\n              " +
                                     _vm._s(
-                                      appointment.status === 0
-                                        ? "Pending"
-                                        : appointment.status === 1
-                                        ? "Approved"
-                                        : "Canceled"
+                                      _vm.statusLabel(appointment.status)
                                     ) +
                                     "\n            "
                                 )
@@ -68873,15 +68933,9 @@ var render = function() {
                                             _vm._v(" "),
                                             _c("td", [
                                               _vm._v(
-                                                "\n                        " +
-                                                  _vm._s(
-                                                    a.status === 0
-                                                      ? "Pending"
-                                                      : a.status === 1
-                                                      ? "Approved"
-                                                      : "Canceled"
-                                                  ) +
-                                                  "\n                      "
+                                                _vm._s(
+                                                  _vm.statusLabel(a.status)
+                                                )
                                               )
                                             ])
                                           ])

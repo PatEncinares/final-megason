@@ -413,4 +413,33 @@ class AppointmentController extends Controller
 
         return response()->json($doctors);
     }
+
+    public function complete($id)
+    {
+        $appt = Appointment::findOrFail($id);
+
+        // Optional: prevent double-completion / completion of canceled
+        if ((int) $appt->status === 3) {
+            Alert::info('', 'Appointment is already marked as Completed.');
+            return redirect()->back();
+        }
+        if ((int) $appt->status === 2) {
+            Alert::error('', 'Canceled appointments cannot be marked as Completed.');
+            return redirect()->back();
+        }
+
+        $appt->status = 3; // Completed
+        $appt->save();
+
+        ActivityLog::create([
+            'user_id'  => Auth::id(),
+            'activity' => 'Marked appointment as completed',
+        ]);
+
+        Alert::success('', 'Appointment marked as Completed.');
+        // Redirect back to the list (keep your existing route; fallback to back())
+        return redirect()->back();
+        // or: return redirect()->route('appointments-list');
+    }
+
 }

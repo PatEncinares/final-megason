@@ -33,13 +33,29 @@
           <tbody v-if="appointments.length">
             <tr v-for="(appointment, index) in appointments" :key="index">
               <td>
-                <button v-if="appointment.status !== 2" @click="confirmCancel(appointment.id)" class="btn btn-danger">
+                <!-- Cancel -->
+                <button
+                  v-if="appointment.status !== 2 && appointment.status !== 3"
+                  @click="confirmCancel(appointment.id)"
+                  class="btn btn-danger mr-2">
                   <i class="fa fa-times"></i> Cancel
                 </button>
-                <button v-else disabled class="btn btn-danger">
+                <button v-else-if="appointment.status === 2" disabled class="btn btn-danger mr-2">
                   <i class="fa fa-times"></i> Canceled
                 </button>
+
+                <!-- Done / Completed -->
+                <button
+                  v-if="appointment.status !== 3 && appointment.status !== 2"
+                  @click="confirmDone(appointment.id)"
+                  class="btn btn-success">
+                  <i class="fa fa-check"></i> Done
+                </button>
+                <button v-else-if="appointment.status === 3" disabled class="btn btn-success">
+                  <i class="fa fa-check"></i> Completed
+                </button>
               </td>
+
               <td>{{ appointment.patient.name }}</td>
               <td>
                 {{ appointment.doctor && appointment.doctor.title_name
@@ -47,25 +63,22 @@
                   : 'Doctor is no longer active' }}
               </td>
               <td>{{ formatDate(appointment.date) }}</td>
-              <!-- <td>{{ appointment.real_time }}</td> -->
               <td>{{ formatTime(appointment.real_time) }}</td>
               <td>{{ appointment.time }}</td>
               <td :class="{
-                pending: appointment.status === 0,
-                approved: appointment.status === 1,
-                canceled: appointment.status === 2
-              }">
-                {{ appointment.status === 0 ? 'Pending' : appointment.status === 1 ? 'Approved' : 'Canceled' }}
+                    pending: appointment.status === 0,
+                    approved: appointment.status === 1,
+                    canceled: appointment.status === 2,
+                    completed: appointment.status === 3
+                  }">
+                {{ statusLabel(appointment.status) }}
               </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- <full-calendar default-view="dayGridMonth" :plugins="calendarPlugins" :events="calendarEvents"
-        @dateClick="handleDateClick" v-else /> -->
       <div class="d-flex gap-2 align-items-center mb-3" v-if="calendar_view">
-
         <select class="form-control w-auto" v-model="selectedMonth" @change="changeCalendarDate">
           <option v-for="(month, index) in months" :value="index">{{ month }}</option>
         </select>
@@ -75,17 +88,15 @@
         </select>
       </div>
 
-
-      <!-- <full-calendar :plugins="calendarPlugins" :headerToolbar="calendarHeader" :events="calendarEvents"
-        @dateClick="handleDateClick" default-view="dayGridMonth" v-else /> -->
-
-      <full-calendar v-show="calendar_view" ref="fullCalendar" default-view="dayGridMonth" :plugins="calendarPlugins"
-        :events="calendarEvents" :headerToolbar="{
-          left: 'prev,next today',
-          center: 'title',
-          right: ''
-        }" @dateClick="handleDateClick" />
-
+      <full-calendar
+        v-show="calendar_view"
+        ref="fullCalendar"
+        default-view="dayGridMonth"
+        :plugins="calendarPlugins"
+        :events="calendarEvents"
+        :headerToolbar="{ left: 'prev,next today', center: 'title', right: '' }"
+        @dateClick="handleDateClick"
+      />
 
       <div v-if="showModal" class="custom-modal-overlay">
         <transition name="fade-scale">
@@ -97,7 +108,11 @@
             <div class="modal-body">
               <div v-if="!modalAppointments.length">No appointments found.</div>
               <div v-else>
-                <div v-for="(appointments, doctorName) in groupedAppointments" :key="doctorName" class="mb-4">
+                <div
+                  v-for="(appointments, doctorName) in groupedAppointments"
+                  :key="doctorName"
+                  class="mb-4"
+                >
                   <h5 class="text-primary border-bottom pb-1 mb-2">Doctor: {{ doctorName }}</h5>
                   <table class="table table-bordered">
                     <thead>
@@ -111,12 +126,9 @@
                     <tbody>
                       <tr v-for="(a, i) in appointments" :key="i">
                         <td>{{ a.patient ? a.patient.name : 'Unknown' }}</td>
-                        <!-- <td>{{ a.real_time }}</td> -->
                         <td>{{ formatTime(a.real_time) }}</td>
                         <td>{{ a.time }}</td>
-                        <td>
-                          {{ a.status === 0 ? 'Pending' : a.status === 1 ? 'Approved' : 'Canceled' }}
-                        </td>
+                        <td>{{ statusLabel(a.status) }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -126,7 +138,6 @@
           </div>
         </transition>
       </div>
-
 
     </div>
   </div>
@@ -159,13 +170,11 @@ export default {
       },
       selectedMonth: new Date().getMonth(),
       selectedYear: new Date().getFullYear(),
-      months: moment.months(), // ['January', 'February', ...]
+      months: moment.months(),
       yearOptions: Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i),
     };
   },
-  components: {
-    FullCalendar
-  },
+  components: { FullCalendar },
   mounted() {
     this.getAppointments();
     this.getPatientsList();
@@ -199,22 +208,18 @@ export default {
         });
     },
     toggleView() {
-      // this.calendar_view = !this.calendar_view;
       this.calendar_view = !this.calendar_view;
-
       this.$nextTick(() => {
         if (this.calendar_view) {
-          setTimeout(() => {
-            this.changeCalendarDate();
-          }, 100); // delay to make sure FullCalendar is fully mounted
+          setTimeout(() => { this.changeCalendarDate(); }, 100);
         }
       });
     },
     handleDateClick(info) {
       const selectedDate = info.dateStr;
       const userType = this.user_data.type;
-
       let filtered = this.appointments.filter(a => a.date === selectedDate);
+
       if (userType === 2) {
         filtered = filtered.filter(a => a.doctor && a.doctor.user_id == this.user_data.id);
       } else if (userType === 3) {
@@ -225,13 +230,11 @@ export default {
       this.modalAppointments = filtered;
       this.showModal = true;
     },
-
     changeCalendarDate() {
       const calendarApi = this.$refs.fullCalendar.getApi();
       const newDate = moment({ year: this.selectedYear, month: this.selectedMonth, day: 1 }).format('YYYY-MM-DD');
       calendarApi.gotoDate(newDate);
     },
-
     confirmCancel(id) {
       Swal.fire({
         title: 'Are you sure?',
@@ -247,12 +250,37 @@ export default {
         }
       });
     },
+    confirmDone(id) {
+      Swal.fire({
+        title: 'Mark as Done?',
+        text: 'Confirm the patient has completed the checkup.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, mark as done'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Same pattern as cancel: do a redirect to a controller action.
+          window.location.href = `/appointments/complete/${id}`;
 
+          // If you prefer Ajax instead, use:
+          // this.$http.post(`/appointments/complete/${id}`).then(() => this.getAppointments());
+        }
+      });
+    },
     formatTime(time) {
       return moment(time, 'HH:mm:ss').format('hh:mm A');
     },
     formatDate(date) {
-      return moment(date).format('MMMM D, YYYY'); // e.g., May 21, 2025
+      return moment(date).format('MMMM D, YYYY');
+    },
+    statusLabel(s) {
+      return s === 0 ? 'Pending'
+           : s === 1 ? 'Approved'
+           : s === 2 ? 'Canceled'
+           : s === 3 ? 'Completed'
+           : 'Unknown';
     }
   },
   computed: {
@@ -308,9 +336,7 @@ export default {
   max-width: 950px;
   width: 95%;
   max-height: 90vh;
-  /* 💡 LIMIT HEIGHT */
   overflow-y: auto;
-  /* 💡 ENABLE SCROLL */
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
@@ -328,35 +354,21 @@ export default {
   cursor: pointer;
 }
 
-.fade-scale-enter-active {
-  animation: fadeInScale 0.3s ease-out forwards;
-}
-
-.fade-scale-leave-active {
-  animation: fadeOutScale 0.2s ease-in forwards;
-}
+.fade-scale-enter-active { animation: fadeInScale 0.3s ease-out forwards; }
+.fade-scale-leave-active { animation: fadeOutScale 0.2s ease-in forwards; }
 
 @keyframes fadeInScale {
-  0% {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
+  0% { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
 }
-
 @keyframes fadeOutScale {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  100% {
-    opacity: 0;
-    transform: scale(0.9);
-  }
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.9); }
 }
+
+/* Status text colors */
+.pending { color: #856404; font-weight: 600; }   /* amber/brown */
+.approved { color: #004085; font-weight: 600; }  /* blue */
+.canceled { color: #721c24; font-weight: 600; }  /* red */
+.completed { color: #155724; font-weight: 600; } /* green */
 </style>

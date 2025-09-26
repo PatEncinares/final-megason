@@ -104,6 +104,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/appointments/view/{id}','AppointmentController@view')->name('view-appointment');
     Route::get('/appointments/approve/{id}','AppointmentController@approve')->name('approve-appointment');
     Route::get('/appointments/cancel/{id}','AppointmentController@cancel')->name('cancel-appointment');
+    Route::get('/appointments/complete/{id}', 'AppointmentController@complete')->name('appointments.complete');
+
 
     Route::get('/profile','PatientController@profile')->name('patient-profile');
 
